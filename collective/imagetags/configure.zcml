@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.imagetags">
+
+  <five:registerPackage package="." initialize=".initialize" />
+  
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.imagetags"
+      directory="profiles/default"
+      description="Installs the collective.imagetags package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  
+  <utility
+	component="collective.imagetags.vocabulary.ImageFieldsVocabularyFactory"
+	name="collective.imagetags.imagefields"
+	/>
+
+  <utility
+        component="collective.imagetags.vocabulary.ImprovedTemplatesVocabularyFactory"
+        name="collective.imagetags.templates"
+        />
+
+  <cmf:registerDirectory name="imagetags_newsitem" />
+  <cmf:registerDirectory name="imagetags_image" />
+  <cmf:registerDirectory name="imagetags_fullscreen"  />
+
+</configure>

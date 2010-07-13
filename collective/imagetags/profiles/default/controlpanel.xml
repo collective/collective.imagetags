@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<object
+    name="portal_controlpanel"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="my.package">
+
+    <configlet
+        title="Image tags settings"
+        action_id="imagetags"
+        appId="collective.imagetags"
+        category="Products"
+        condition_expr=""
+        url_expr="string:${portal_url}/@@imagetags-controlpanel"
+        icon_expr="string:${portal_url}/++resource++collective.imagetags/icon.png"
+        visible="True"
+        i18n:attributes="title">
+            <permission>Manage portal</permission>
+    </configlet>
+
+</object>
+

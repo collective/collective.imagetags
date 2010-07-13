@@ -1,0 +1,9 @@
+<script type="text/javascript"
+    tal:define="code view/code"
+    tal:content="structure code"
+    tal:condition="code">
+        ImageTags.replaceImageWithTags('');
+</script>
+<tal:comment condition="not:view/code">
+<!-- ImageTags: No JS replacement for this content type or JS replacement is disabled -->
+</tal:comment>

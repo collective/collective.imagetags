@@ -1,0 +1,246 @@
+.tag-box-wrapper {
+    padding: 30px 0 0 30px;
+}
+
+.tag-image-wrapper {
+    position: relative;
+    display: block; /* .tag-image-wrapper is a span acting as a div */
+}
+
+.tag-tagging img {
+    cursor: crosshair;
+}
+
+.tag-manage {
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+.tag-v-box {
+    position: absolute;
+    top: 0;
+    border: solid gray;
+    border-width: 1px 0 0 1px;
+    height: 100%;
+    width: 10%;
+    z-index: 100;
+}
+
+.tag-v-box-5 {
+    width: 5%;
+}
+
+.tag-v-box-label {
+    position: absolute;
+    width: 10%;
+    top: -5%;
+    text-align: center;
+    z-index: 100;
+}
+
+.tag-h-box {
+    position: absolute;
+    left: 0;
+    border: solid gray;
+    border-width: 1px 0 0 1px;
+    height: 10%;
+    width: 100%;
+    z-index: 100;
+}
+
+.tag-h-box-5 {
+    height: 5%;
+}
+
+.tag-h-box-label {
+    position: absolute;
+    left: -30px;
+    text-align: center;
+    line-height: 10%;
+    z-index: 100;
+}
+
+.tag-manage-inline .tag-v-box,
+.tag-manage-inline .tag-v-box-label,
+.tag-manage-inline .tag-h-box,
+.tag-manage-inline .tag-h-box-label {
+    display: none;
+}
+
+#portal-columns a.tag-link {
+    position: absolute;
+    height: 15%;
+    width: 15%;
+    display: block;
+    text-align: center;
+    font-size: 10pt;
+    line-height: normal;
+    border: 0;
+    z-index: 200;
+}
+
+#portal-columns a.tag-link:hover {
+    border: none;
+}
+
+#portal-columns .tag-blank {
+    width: 100%;
+    height: 100%;
+}
+
+#portal-columns .tag-image-wrapper a,
+#portal-columns .tag-image-wrapper a:visited {
+    border: 0;
+}
+
+a .tag-link-title,
+a .tag-link-center {
+    display: none;
+}
+
+.tag-tagging a .tag-link-center,
+.tag-manage a .tag-link-center,
+a.tag-link:hover .tag-link-center, 
+a.tag-show .tag-link-center {
+    display: block;
+    position: absolute;
+    top: 50%;
+    height: 50%;
+    width: 100%;
+    left: 1px;
+    background: url(++resource++collective.imagetags/tag-center.gif) no-repeat 50% 0 transparent;
+}
+
+/* When managing tags it's displayed. When viewing image, just on hover or when hover the matching plain link */
+.tag-manage a .tag-link-title,
+.tag-tagging a .tag-link-title,
+a.tag-link:hover .tag-link-title, 
+a.tag-show .tag-link-title {
+    color: #fff;
+    background: #205C90;
+    border: 4px solid #205C90;
+    top: 100%;
+    display: block;
+    position: absolute;
+    font-weight: bold;
+    z-index: 250;
+    left: 50%;
+    white-space: nowrap;
+}
+
+.tag-manage a.tag-link-active .tag-link-title,
+.tag-tagging a.tag-link-active .tag-link-title {
+    background: #002c4e;
+    border: 2px solid #205c90;
+    padding: 2px;
+}ImageTags
+
+.tag-link, tag-link img, tag-link span {
+    cursor: pointer;
+}
+
+.tag-no-link, tag-no-link img, tag-no-link span {
+    cursor: default;
+}
+
+.tag-tagging .tag-link, 
+.tag-tagging .tag-link img {
+    cursor: move;
+}
+
+.tag-tagging .tag-link-title {
+    cursor: text;
+}
+
+.tag-actions {
+    font-size: 90%;
+    display: none;
+}
+
+.tag-tagging .tag-actions {
+    display: inline;
+}
+
+.tag-tag-list {
+    display: block; /* tag-tag-list is a span acting as a div */
+    border: 1px solid #ccc;
+    padding: 6px;
+    margin-left: 30px;
+}
+
+.tag-tag-list-embedded {
+    display: block;
+    font-size: 8pt;
+}
+
+#tag-tag-picture, 
+#tag-start-tagging, 
+#tag-stop-tagging {
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+iframe.image-tags {
+    border: 0;
+}
+
+.fullscreen .tag-image-wrapper {
+    margin: auto;
+}
+
+.fullscreen .tag-tag-list-embedded {
+    margin: auto;
+    font-size: 10pt;
+}
+
+.tag-embed-code label {
+    color: #666;
+    width: 15%;
+    float: left;
+    display: block;
+    text-align: right;
+    margin-right: 3px;
+}
+
+.tag-embed-code input {
+    color: #666;
+    width: 80%;
+    float: left;
+}
+
+.tag-embed-code-dyn label {
+    color: #666;
+    margin-right: 10px;
+}
+
+.tag-embed-code-dyn input {
+    color: #666;
+    display: block;
+    width: 100%;
+}
+
+.tag-embed-code-dyn input.radio {
+    display: inline;
+    width: auto;
+    margin-right: 5px;
+}
+
+#formfield-form-widgets-improved_templates label,
+#formfield-form-widgets-improved_templates .label {
+    font-weight: normal;
+}
+
+.ui-dialog-content .text-widget {
+    width: 100%;
+}
+
+.ui-dialog-content .field-missing-value,
+.ui-dialog-content .field-missing-value:focus {
+    background: red;
+    color: white;
+}
+
+/* Fix public.css 599 */
+#content div.newsImageContainer p.discreet {
+    position: static;
+}

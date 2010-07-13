@@ -1,0 +1,53 @@
+Get the imagefields vocabulary factory. 
+    >>> from zope.component import getUtility
+    >>> from zope.schema.interfaces import IVocabularyFactory
+    >>> vf = getUtility(IVocabularyFactory, name='collective.imagetags.imagefields')
+
+Login to start testing
+    >>> self.loginAsPortalOwner()
+    >>> portal = self.portal
+
+Create a News Item and test the returned vocabulary
+    >>> id = portal.invokeFactory('News Item', 'newsitem')
+    >>> newsitem = getattr(portal, id)
+    >>> newsitem
+    <ATNewsItem at /plone/newsitem>
+    >>> vf(newsitem).by_value.keys()
+    ['image']
+
+Create an Image and test the returned vocabulary
+    >>> id = portal.invokeFactory('Image', 'image')
+    >>> image = getattr(portal, id)
+    >>> image
+    <ATImage at /plone/image>
+    >>> vf(image).by_value.keys()
+    ['image']
+
+Create a Page (ATDocument) and test the returned vocabulary
+    >>> id = portal.invokeFactory('Document', 'doc')
+    >>> doc = getattr(portal, id)
+    >>> doc
+    <ATDocument at /plone/doc>
+    >>> vf(doc).by_value.keys()
+    []
+
+Now get the templates vocabulary factory and test its terms
+    >>> vf = getUtility(IVocabularyFactory, name='collective.imagetags.templates')
+    >>> vocabulary = vf(portal)
+    >>> len(vocabulary)
+    3
+    >>> term = vocabulary.getTerm('imagetags_newsitem')
+    >>> term
+    <zope.schema.vocabulary.SimpleTerm object at ...>
+    >>> term.token
+    'News Item (newsitem_view)'
+    >>> term = vocabulary.getTerm('imagetags_image')
+    >>> term
+    <zope.schema.vocabulary.SimpleTerm object at ...>
+    >>> term.token
+    'Image (image_view)'
+    >>> term = vocabulary.getTerm('imagetags_fullscreen')
+    >>> term
+    <zope.schema.vocabulary.SimpleTerm object at ...>
+    >>> term.token
+    'Fullscreen image (image_view_fullscreen)'

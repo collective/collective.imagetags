@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.imagetags">
+
+<head>
+    <metal:javascriptslot fill-slot="javascript_head_slot">
+    <script type="text/javascript" src="" tal:attributes="src string:${portal_url}/++resource++collective.imagetags/manage-tags.js"></script>
+    </metal:javascriptslot>
+</head>
+<body>
+    <metal:content-core fill-slot="content-core">
+        <metal:block define-macro="content-core">
+
+        <tal:image 
+            tal:define="imagetags nocall:context/@@imagetags-img;" 
+            tal:replace="structure python:imagetags(name='image_large', embedded=False)" />
+        
+
+        <tal:form tal:replace="structure context/@@imagetags-form" />
+        
+
+        <fieldset id="imagetags-manage">
+            <legend i18n:translate="">Mangage tags</legend>
+            <tal:manage-tags tal:define="tags view/get_tags;
+                                         tag_keys python:tags.keys();
+                                         dummy python:tag_keys.sort()">
+                                         
+             <div class="no-tag" i18n:translate="" tal:condition="python:len(tag_keys)==0">
+                This image has no tag yet.
+             </div>
+
+
+		    <form name="imagetags-manage"
+		          method="post"
+		          action="imagetags-manage"
+		          tal:attributes="action string:${context/absolute_url}/@@imagetags-manage"
+                  tal:condition="python:len(tag_keys)&gt;0">
+                                          	      
+                 <table class="listing">
+                  <thead>
+	                <th i18n:translate="">Title</th>
+                            <th i18n:translate="">URL</th>
+                            <th i18n:translate="">Coordinates</th>
+                            <th i18n:translate="" id="imagetags-remove">Remove</th>
+	              </thead>
+                  <tbody>
+                      <tal:rows repeat="id tag_keys">
+                        <tr tal:define="tag python:tags[id]" >
+                          <td><a href="" tal:attributes="href string:${context/absolute_url}/@@imagetags-manage?id=${id}" tal:content="tag/title">Title</a></td>
+                          <td><a href="" tal:attributes="href string:${tag/url}" tal:content="tag/url">URL</a></td>
+                          <td tal:content="string:${tag/x}, ${tag/y}">x, y</td>
+                          <td><input type="checkbox" name="form.widgets.remove:list" value="" tal:attributes="value id" /></td>
+                        </tr>
+                      </tal:rows>
+                  </tbody> 
+                 </table>
+			    <input tal:replace="structure context/@@authenticator/authenticator" />
+                <input type="submit" value="Remove selected" i18n:attributes="value" name="form.buttons.remove" />
+		    </form>
+
+            </tal:manage-tags>
+        </fieldset>
+
+        <tal:comment replace="nothing">
+           Just used for AJAX interaction
+        </tal:comment>
+        <div id="ajax-form" style="display: none;" tal:content="structure context/@@imagetags-form-ajax" />
+
+
+        </metal:block>
+    </metal:content-core>
+</body>
+
+</html>
+

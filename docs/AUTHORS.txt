@@ -1,0 +1,5 @@
+Authors and Contributors
+========================
+* Marcos F. Romero <marcos.romero {at} inter-cultura {dot} com> (developer)
+* Juan Pablo Gimenez <jpg {at} rcom {dot} com {dot} ar> (advisor)
+

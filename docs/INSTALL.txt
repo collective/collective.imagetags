@@ -1,0 +1,26 @@
+Installation
+============
+
+* Add ``collective.imagetags`` to the list of eggs to install, e.g.::
+
+    [buildout]
+    ...
+    eggs =
+        ...
+        collective.imagetags
+
+* Tell the plone.recipe.zope2instance recipe to install a ZCML slug::
+
+    [instance]
+    recipe = plone.recipe.zope2instance
+    ...
+    zcml =
+        collective.imagetags
+
+* Re-run buildout, e.g. with::
+
+    $ ./bin/buildout
+
+You can skip the ZCML slug if you are using Plone 3.3 or if you are going to explicitly include
+the package from another package's configure.zcml file.
+

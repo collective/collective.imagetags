@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="collective.imagetags"
+      tal:omit-tag="">
+      
+    <tal:defines define="view_id view/getId">
+        <fieldset id="" tal:attributes="id view_id">
+            <legend tal:content="view/label">Legend</legend>
+            <span tal:replace="structure view/contents" />
+        </fieldset>
+        
+        <tal:comment replace="nothing">
+            All the following are just used for the AJAX form
+        </tal:comment>
+    </tal:defines>
+    
+    
+    
+    
+</html>
+

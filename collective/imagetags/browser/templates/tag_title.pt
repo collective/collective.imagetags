@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="collective.imagetags"
+      tal:omit-tag="">
+
+    <span tal:define="tag options/data;
+                    url tag/url | string:;
+                    id options/id;
+                    safe_id python:id.replace('.', '-')"
+        tal:attributes="id string:image-tag-plain-${safe_id}">
+        <span tal:condition="not:url" 
+             tal:attributes="id string:image-tag-link-plain-${safe_id}"
+             tal:content="tag/title"
+             class="tag-link-plain">
+        </span>
+        <a tal:attributes="href python:url and url or None;
+                          id string:image-tag-link-plain-${safe_id}"
+          tal:content="tag/title"
+          tal:condition="url"
+          class="tag-link-plain">
+        </a>
+        <span class="tag-actions">(
+            <a i18n:translate="" class="tag-remove" href=""
+              tal:attributes="href string:${context/absolute_url}/@@imagetags-manage?form.widgets.remove:list=${id}">
+              Remove
+            </a> | 
+            <a i18n:translate="" class="tag-edit" href=""
+              tal:attributes="href string:${context/absolute_url}/@@imagetags-manage?id=${id};
+                              id string:image-tag-edit-${safe_id}">
+              Edit
+            </a>
+        )</span>
+    </span>
+</html>

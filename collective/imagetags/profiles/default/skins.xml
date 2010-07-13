@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool">
+ <object name="imagetags_newsitem" meta_type="Filesystem Directory View"
+         directory="collective.imagetags:skins/imagetags_newsitem"/>
+ <object name="imagetags_image" meta_type="Filesystem Directory View"
+         directory="collective.imagetags:skins/imagetags_image"/>
+ <object name="imagetags_fullscreen" meta_type="Filesystem Directory View"
+         directory="collective.imagetags:skins/imagetags_fullscreen"/>
+</object>

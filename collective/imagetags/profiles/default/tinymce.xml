@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<object>
+ <layout>
+  <styles>
+   <element value="Show tags|img|imagetags-show"/>
+  </styles>
+ </layout>
+</object>

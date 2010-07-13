@@ -1,0 +1,446 @@
+===================================
+Initial setup of portal and browser
+===================================
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> import re
+    >>> catalog = getToolByName(self.portal, 'portal_catalog')
+    >>> portal.error_log.setProperties(20, ignored_exceptions=())
+    >>> portal_url = self.portal.absolute_url()
+    >>> browser = Browser()
+
+Log in as administrator
+    >>> browser.open(portal_url + '/login')
+    >>> browser.getControl('Login Name').value = portal_owner
+    >>> browser.getControl('Password').value = default_password
+    >>> browser.getControl('Log in').click()
+    
+====================
+Check the 'Tags' tab
+Testing:
+a. profiles/default/actions.xml
+b. browser/helper: has_image_field -> image_fields
+====================
+
+I will now open a news item without image to check that there's not 'Tags' tab.
+('Tags' tab are only available for objects with images)
+
+    >>> browser.open(portal_url + '/no-image')
+    >>> 'News item without image' in browser.contents
+    True
+    >>> browser.getLink('Tags')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+    
+I will now open a page ('Tags' tab are only available for objects with images and pages has no image field).
+
+    >>> browser.open(portal_url + '/doc')
+    >>> 'Test Document' in browser.contents
+    True
+    >>> browser.getLink('Tags')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+I will not try with a news item with an image. 
+First I check that there's an image and then I get the 'Tags' tab
+
+    >>> browser.open(portal_url + '/with-image')
+    >>> 'News item without image' in browser.contents
+    True
+    >>> browser.getLink(url='image_view_fullscreen')
+    <Link text='News item with image[IMG]' url='http://nohost/plone/with-image/image/image_view_fullscreen'>
+    >>> tags = browser.getLink('Tags')
+    >>> tags
+    <Link text='Tags' url='http://nohost/plone/with-image/@@imagetags-manage'>
+
+==================================================
+Interact with the new/update/delete tags interface
+Testing:
+a. browser/manage.py browser view: all its methods and template
+b. browser/helper.py browser view: tag_box and tag_title methods (and associated templates)
+c. browser/image.py browser view: rendering of template
+d. browser/forms.py: imagetags-form browser view (form) and imagetags-form-ajax browser view (form)
+e. browser/new_tag_response.py: rendering of xml template
+==================================================
+
+Finally, I will open an image and go to manage tags page
+    >>> browser.open(portal_url + '/image/view')
+    >>> 'Test Image' in browser.contents
+    True
+    >>> browser.getLink('Tags').click()
+    
+Before proceeding, I will make a search based on IImageWithTags interface to check that there's
+no object providing that marker interface
+    >>> from collective.imagetags.interfaces import IImageWithTags
+    >>> brains = catalog(object_provides=IImageWithTags.__identifier__)
+    >>> len(brains)
+    0
+    
+Manage page has two forms: one for non-JavaScript browsers and the other one for AJAX interaction.
+Some of their fields are identical, so special caution must be taken
+    >>> browser.getControl('Title')
+    Traceback (most recent call last):
+    ...
+    AmbiguityError: label 'Title'
+
+
+I will now add a new tag with the regular (non-JavaScript) form.
+New tags are submitted without id
+    >>> browser.getControl(name='regform.widgets.id').value == ''
+    True
+    >>> browser.getControl('Title', index=0).value = 'Top left corner'
+    >>> browser.getControl('Link', index=0).value = 'http://plone.org/'
+    >>> browser.getControl('X position').value = '0'
+    >>> browser.getControl('Y position').value = '0'
+    >>> browser.getControl('Save', index=0).click()
+    
+Regular creation of tags is notified via status messages
+    >>> 'Tag "Top left corner" added' in browser.contents
+    True
+ 
+There should now be three links for the just created tag:
+1. The tag box inside the image (with a blank image inside it)
+2. The tag text in the list of tags (with no image inside it)
+3. The tag details in the table of tags
+    >>> tag = browser.getLink('Top left corner', index=0)
+    >>> tag.url
+    'http://plone.org/'
+    >>> '[IMG]' in tag.text
+    True
+    >>> tag = browser.getLink('Top left corner', index=1)
+    >>> tag.url
+    'http://plone.org/'
+    >>> '[IMG]' in tag.text
+    False
+    >>> tag = browser.getLink('Top left corner', index=2)
+    >>> '/@@imagetags-manage?id=' in tag.url
+    True
+
+There are no more 'Top left corner' links
+    >>> browser.getLink('Top left corner', index=3)
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+The tag-box link should be absolute-positioned in -7.5%, -7.5% 
+(15% taken from the center of the tag: 7.5% left, 7.5% right, 7.5% top, 7.5% bottom)
+    >>> tag = browser.getLink('Top left corner', index=0)
+    >>> tag.attrs['style'].strip()
+    'top: -7.5%; left: -7.5%;'
+
+I will now click on the last link to open this page with the tag's data pre-loaded in the form
+    >>> tag = browser.getLink('Top left corner', index=2)
+    >>> tag.click()
+    >>> browser.getControl('Title', index=0).value
+    'Top left corner'
+    >>> browser.getControl('Link', index=0).value
+    'http://plone.org/'
+    >>> browser.getControl('X position').value
+    '0.0'
+    >>> browser.getControl('Y position').value
+    '0.0'
+
+This tag has now an id
+    >>> browser.getControl(name='regform.widgets.id').value != ''
+    True
+
+If I re-submit the tag, it will be updated. No new tag will be created, as it already has an id value
+    >>> browser.getControl('Link', index=0).value = ''
+    >>> browser.getControl('Save', index=0).click()
+    
+Regular updates of tags is notified via status messages
+    >>> 'Tag "Top left corner" updated' in browser.contents
+    True
+
+Now that the tag has no associated URL there's just one link, the one to edit it
+    >>> '@@imagetags-manage?id=' in browser.getLink('Top left corner').url
+    True
+    
+New tag should have marked the image object with IImageWithTags interface
+    >>> brains = catalog(object_provides=IImageWithTags.__identifier__)
+    >>> len(brains)
+    1
+    >>> brains[0].getId
+    'image'
+
+Let's try to create a new tag with the second (AJAX-oriented) form.
+    >>> browser.getControl('Title', index=1).value = 'Bottom right corner'
+    >>> browser.getControl('Link', index=1).value = 'http://plone.org/'
+
+'X and Y fields are hidden now'
+    >>> hidden = browser.getControl(name='form.widgets.x')
+    >>> hidden.type
+    'hidden'
+    >>> hidden.value = '100'
+    >>> hidden = browser.getControl(name='form.widgets.y')
+    >>> hidden.type
+    'hidden'
+    >>> hidden.value = '100'
+
+There's also a hidden 'ajax' field.
+This field tells this form is submitted via ajax, so a special response is expected.
+    >>> hidden = browser.getControl(name='form.widgets.ajax')
+    >>> hidden.type
+    'hidden'
+    >>> browser.getControl('Save', index=1).click()
+    >>> 'xml' in browser.contents
+    True
+    >>> browser.headers['content-type']
+    'text/xml;charset=utf-8'
+    >>> p1=re.compile('(\>)(\s)+(\<\w)')
+    >>> p2=re.compile('(</.+>)(\s)+(\</\w)')
+    >>> p3=re.compile( '\s+')
+    >>> contents=p3.sub( ' ', p2.sub('\\1\\3', p1.sub( '\\1\\3', browser.contents)))
+    >>> '<box><![CDATA[ <a class="tag-link "' in contents
+    True
+
+    >>> '<title><![CDATA[ <span id="image-tag-plain-' in contents
+    True
+    
+    >>> browser.goBack()
+    >>> browser.reload()
+    
+Creation of tags with ajax-form (form submitting an 'ajax' field) is NOT notified via status messages
+    >>> 'Tag "Bottom right corner" added' in browser.contents
+    False
+
+The new tag is nos positioned at 92.5%;92.5% (100 - 7.5)
+    >>> tag = browser.getLink('Bottom right corner')
+    >>> tag.attrs['style'].strip()
+    'top: 92.5%; left: 92.5%;'
+
+Yet another tag
+    >>> browser.getControl('Title', index=0).value = 'Center of the image'
+    >>> browser.getControl('Link', index=0).value = 'http://plone.net/'
+    >>> browser.getControl('X position').value = '50'
+    >>> browser.getControl('Y position').value = '50'
+    >>> browser.getControl('Save', index=0).click()
+
+New tag is informed via status message    >>> from Products.CMFCore.utils import getToolByName
+    >>> catalog = getToolByName(self.portal, 'portal_catalog')
+
+    >>> 'Tag "Center of the image" added' in browser.contents
+    True
+
+The new tag is positioned at 42.5%;42.5% (50 - 7.5)
+    >>> tag = browser.getLink('Center of the image')
+    >>> tag.attrs['style'].strip()
+    'top: 42.5%; left: 42.5%;'
+
+We'll remove now the last created tag    
+    >>> remove = browser.getControl(name='form.widgets.remove:list')
+    >>> remove.value = [remove.options[-1]]
+    >>> browser.getControl('Remove selected').click()
+
+Removals are also informed via status messages
+    >>> '1 tag removed' in browser.contents
+    True
+
+Remove all tags
+    >>> remove = browser.getControl(name='form.widgets.remove:list')
+    >>> remove.value = remove.options
+    >>> browser.getControl('Remove selected').click()
+
+    >>> '2 tags removed' in browser.contents
+    True
+
+There's no remaining tag
+    >>> browser.getLink(url='@@imagetags-manage?id=')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+    
+There should be no remaining object providing IImageWithTags interface
+    >>> brains = catalog(object_provides=IImageWithTags.__identifier__)
+    >>> len(brains)
+    0
+    
+====================================
+Image tags settings in Control Panel
+Testing:
+a. browser/controlpanel.py
+b. browser/viewlet.py
+c. browser/templates/image.pt (Embed code part)
+c. skins templates
+====================================
+
+Now let's create two new tags to play with
+    >>> browser.getControl('Title', index=0).value = 'First tag'
+    >>> browser.getControl('X position').value = '0'
+    >>> browser.getControl('Y position').value = '0'
+    >>> browser.getControl('Save', index=0).click()
+
+    >>> browser.getControl('Title', index=0).value = 'Second tag'
+    >>> browser.getControl('X position').value = '10'
+    >>> browser.getControl('Y position').value = '10'
+    >>> browser.getControl('Save', index=0).click()
+
+Let's try some settings in Plone Control Panel
+    >>> browser.open(portal_url + '/plone_control_panel')
+    >>> browser.getLink('Image tags settings').click()
+
+Keep the url for future quick access
+    >>> settings_url = browser.url
+
+1. Check Inline image replacement
+    >>> browser.getControl('Replace inline images').click()
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+Open again news item and test if inline images are replaced with JS
+    >>> browser.open(portal_url + '/with-image')
+    >>> "ImageTags.replaceImageWithTags('#portal-columns img.imagetags-show');" in browser.contents
+    True
+
+2. Check Replacement rules for content types
+    >>> browser.open(settings_url)
+    >>> browser.getControl('Enable JavaScript replacement rules').click()
+    >>> rules = browser.getControl('JavaScript replacement rules', index=1).value
+    >>> 'News Item|.newsImageContainer>a>img' in rules
+    True
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+Open again news item and test if JS replacement is enabled
+    >>> browser.open(portal_url + '/with-image')
+    >>> "ImageTags.replaceImageWithTags('.newsImageContainer>a>img');"  in browser.contents
+    True
+
+Open an image and test if JS replacement is enabled
+    >>> 'Image|#content-core>a>img' in rules
+    True
+    >>> browser.open(portal_url + '/image/view')
+    >>> "ImageTags.replaceImageWithTags('#content-core>a>img');" in browser.contents
+    True
+
+3. Disable all JS replacement
+    >>> browser.open(settings_url)
+    >>> checkbox = browser.getControl('Replace inline images')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    False
+    >>> checkbox = browser.getControl('Enable JavaScript replacement rules')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    False
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+Test if the news item now has JS replacement rules
+    >>> browser.open(portal_url + '/with-image')
+    >>> "ImageTags.replaceImageWithTags('#portal-columns img.imagetags-show');" in browser.contents
+    False
+    >>> "ImageTags.replaceImageWithTags('.newsImageContainer>a>img');"  in browser.contents
+    False
+
+4. Usage of iframes embed code
+
+Initially, iframes are enabled
+    >>> browser.open(portal_url + '/with-image')
+    >>> browser.getLink('Tags').click()
+    >>> 'Embed code (HTML)' in browser.contents
+    True
+
+    >>> browser.open(settings_url)
+    >>> checkbox = browser.getControl('Use <iframe />')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    False
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+    
+After disabling iframes, embed code isn't shown any more
+    >>> browser.open(portal_url + '/with-image')
+    >>> browser.getLink('Tags').click()
+    >>> 'Embed code (HTML)' in browser.contents
+    False
+    
+5. Custom templates
+5.1. News item template override
+    >>> browser.open(portal_url + '/with-image')
+    >>> 'Tagged' in browser.contents
+    False
+    >>> browser.open(settings_url)
+    >>> checkbox = browser.getControl('newsitem_view')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    True
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+    >>> #Hack to update skin information
+    >>> self._refreshSkinData()
+
+    >>> browser.open(portal_url + '/with-image')
+    >>> 'Tagged' in browser.contents
+    True
+    
+5.2. Image view fullscreen template override
+Let's click on the image to open it in fullscreen mode
+    >>> browser.getLink(url='image_view_fullscreen').click()
+    >>> 'Tagged' in browser.contents
+    False
+    >>> fullscreen_url = browser.url
+    >>> browser.open(settings_url)
+    >>> checkbox = browser.getControl('image_view_fullscreen')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    True
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+    >>> #Hack to update skin information
+    >>> self._refreshSkinData()
+    >>> browser.open(fullscreen_url)
+    >>> 'Tagged' in browser.contents
+    True
+    
+5.3. Image template override
+    >>> browser.open(portal_url + '/image/view')
+    >>> 'Tagged' in browser.contents
+    False
+    >>> image_url = browser.url
+    >>> browser.open(settings_url)
+    >>> checkbox = browser.getControl('image_view')
+    >>> checkbox.click()
+    >>> checkbox.selected
+    True
+    >>> browser.getControl('Save').click()
+    >>> 'Changes saved' in browser.contents
+    True
+
+    >>> #Hack to update skin information
+    >>> self._refreshSkinData()
+    >>> browser.open(image_url)
+    >>> 'Tagged' in browser.contents
+    True
+    >>> '<span class="tag-link-title">First tag</span>' in browser.contents
+    True
+    >>> '<span class="tag-link-title">Second tag</span>' in browser.contents
+    True
+    >>> browser.getLink('Tag this picture').url == portal_url + '/image/@@imagetags-manage'
+    True
+    
+Let's logout and then login as 'contributor', a portal member that has the contributor role assigned.
+'Tags' tab is only available for users with "Modify portal content" permission.
+
+    >>> browser.getLink('Log out').click()
+    >>> browser.open(portal_url + '/login')
+    >>> browser.getControl(name='__ac_name').value = 'contributor'
+    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='submit').click()
+    >>> browser.open(image_url)
+    >>> browser.getLink('Tags')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError

@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="collective.imagetags"
+      tal:omit-tag="">
+
+    <a tal:define="tag options/data;
+                   left python:tag['x']-7.5;
+                   top python:tag['y']-7.5;
+                   url tag/url | string:;
+                   class python:not url and 'tag-no-link' or '';
+                   id options/id;
+                   safe_id python:id.replace('.', '-')"
+       tal:attributes="style string: top: ${top}%;; left: ${left}%;;;
+                       href python:url and url or None;
+                       id string:image-tag-${safe_id};
+                       class string:tag-link ${class}"
+       class="tag-link">
+        <img src="" class="tag-blank" alt="" tal:attributes="src string:${view/portal_url}/++resource++collective.imagetags/blank.gif" />
+        <span class="tag-link-center">&#160;</span>
+        <span class="tag-link-title" tal:content="tag/title">Tag title</span>
+    </a>        
+</html>

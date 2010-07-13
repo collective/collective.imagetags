@@ -1,0 +1,111 @@
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.imagetags">
+  <!-- -*- extra stuff goes here -*- -->
+
+  <include package="plone.app.z3cform" />
+  
+  <include package="plone.app.registry" />
+
+  <!-- Control panel related directives -->
+  
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="imagetags-controlpanel"
+      class="collective.imagetags.browser.controlpanel.AdminRulesFormWrapper"
+      permission="cmf.ManagePortal" 
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+  
+
+  <!-- Form related directives-->
+  
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="imagetags-form"
+      class="collective.imagetags.browser.forms.AddTag"
+      permission="cmf.ModifyPortalContent" 
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="imagetags-form-ajax"
+      class="collective.imagetags.browser.forms.AddTagAjax"
+      permission="cmf.ModifyPortalContent"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+      
+  <adapter 
+      for="Products.Archetypes.interfaces.IBaseObject"
+      provides="collective.imagetags.browser.forms.IAddTag"    
+      factory="collective.imagetags.browser.forms.AddTagAdapter" 
+      />
+      
+
+  <!-- Tags manager -->
+
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="imagetags-manage"
+      class="collective.imagetags.browser.manage.ManageTags"
+      template="templates/manage.pt"
+      allowed_interface="collective.imagetags.browser.interfaces.IManageTags"
+      permission="cmf.ModifyPortalContent"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+
+  <!-- Tagged image template -->
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="imagetags-img"
+      class="collective.imagetags.browser.image.ImageTagsImage"
+      template="templates/image.pt"
+      permission="zope2.View"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+
+  <!-- Other views -->
+
+  <browser:page
+      for="*"
+      name="imagetags-helper"
+      class="collective.imagetags.browser.helper.ImageTagsHelper"
+      allowed_interface="collective.imagetags.browser.interfaces.IImageTagsHelper"
+      permission="zope2.View"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+      
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="imagetags-newtag"
+      class="collective.imagetags.browser.new_tag_response.NewTagResponse"
+      template="templates/new_tag_response.pt"
+      permission="zope2.View"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
+
+
+  <!-- Viewlet registration -->
+
+  <browser:viewlet
+        name="collective.imagetags.jsviewlet"
+        manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+        layer="collective.imagetags.interfaces.IImageTagsLayer"
+        class="collective.imagetags.browser.viewlet.ImageTagsJSViewlet"
+        permission="zope2.View"
+        view="plone.app.layout.globals.interfaces.IViewView"
+        />
+
+
+  <!-- Resources registration -->
+  
+  <browser:resourceDirectory
+        name="collective.imagetags"
+        directory="resources"
+        layer="collective.imagetags.interfaces.IImageTagsLayer"
+        />
+
+
+</configure>
