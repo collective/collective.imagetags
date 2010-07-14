@@ -1,12 +1,22 @@
 <?xml version="1.0"?>
-<object name="portal_actions">
- <action-provider name="portal_actions">
-  <action title="Tags" action_id="manageTags" category="object"
-     condition_expr="object/@@imagetags-helper/has_image_field"
-     url_expr="string:${object/absolute_url}/@@imagetags-manage"
-     icon_expr=""
-     visible="True">
-   <permission>Modify portal contents</permission>
-  </action>
- </action-provider>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <object name="object" meta_type="CMF Action Category">
+  <property name="title"></property>
+  <object name="manageTags" meta_type="CMF Action"
+     i18n:domain="collective.imagetags">
+   <property name="title" i18n:translate="">Tags</property>
+   <property name="description" i18n:translate=""></property>
+   <property
+      name="url_expr">string:${object/absolute_url}/@@imagetags-manage</property>
+   <property name="link_target"></property>
+   <property name="icon_expr"></property>
+   <property
+      name="available_expr">object/@@imagetags-helper/has_image_field</property>
+   <property name="permissions">
+    <element value="Modify portal content"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
  </object>
+</object>

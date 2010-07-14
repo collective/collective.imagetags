@@ -8,6 +8,7 @@ Tagged image can then be displayed in:
  * News Items
  * Images
  * Fullscreen images
+ * any other template that you want
 by means of:
  * custom templates provided with this package, or
  * replacement of images via AJAX.
@@ -28,3 +29,23 @@ inside an <iframe /> element.
 HTML code can then be inserted inside a text field to display the tagged image.
 
 This behavior can be disabled via "Image tags settings" configlet in control panel.
+
+Features
+========
+
+Highlights
+--------
+- Degrades gracefully in non-JavaScript browsers
+- All JavaScript interaction done with jQuery and jQueryUI (dialogs, draggables, etc.)
+- i18n support (English and Spanish translations)
+- Tested in Plone 4.0b3
+
+Browser support
+---------------
+- Linux: Firefox 3.6.6, Google Chrome 5.0
+- Windows: Firefox 3.6.6, Google Chrome 5.0, Internet Explorer 7, Internet Explorer 8
+
+Known issues
+============
+- Content types with more than one image field are not fully supported. The only missing part is to provide a way of changing the tagging image in @@imagetags-manage browser view.
+- Not working in Plone 3 (yet).

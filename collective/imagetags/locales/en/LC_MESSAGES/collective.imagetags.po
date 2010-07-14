@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.imagetags 1.0\n"
-"POT-Creation-Date: 2010-07-14 01:01+0000\n"
+"POT-Creation-Date: 2010-07-14 11:46+0000\n"
 "PO-Revision-Date: 2010-07-14 1:01+0000\n"
 "Last-Translator: Marcos Romero <marcos.romero {at} inter-cultura {dot} com>\n"
 "Language-Team: English\n"
@@ -11,156 +11,222 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
 
-#: ./browser/manage.py:48
+#: imagetags/browser/manage.py:48
 msgid "${count} tag removed."
 msgstr ""
 
-#: ./browser/manage.py:50
+#: imagetags/browser/manage.py:50
 msgid "${count} tags removed."
 msgstr ""
 
-#: ./browser/templates/form-ajax.pt:23
+#: imagetags/interfaces.py:60
+msgid "Add a replacement rule in each line with this format: 'Portal type|CSS img selector'."
+msgstr ""
+
+#: imagetags/browser/templates/form-ajax.pt:23
 msgid "Are you sure you want to remove this tag?"
 msgstr ""
 
-#: ./browser/controlpanel.py:70
+#: imagetags/browser/controlpanel.py:70
 msgid "Cancel"
 msgstr ""
 
-#: ./browser/controlpanel.py:66
+#: imagetags/browser/controlpanel.py:66
 msgid "Changes saved"
 msgstr ""
 
-#: ./browser/templates/manage.pt:47
+#: imagetags/browser/templates/manage.pt:47
 msgid "Coordinates"
 msgstr ""
 
-#: ./browser/templates/image.pt:152
+#: imagetags/interfaces.py:21
+msgid "Default Plone templates to be overriden with tagged-images."
+msgstr ""
+
+#: imagetags/browser/templates/image.pt:152
 msgid "Done tagging"
 msgstr ""
 
-#: ./browser/templates/tag_title.pt:30
+#: imagetags/browser/templates/tag_title.pt:30
 msgid "Edit"
 msgstr ""
 
-#: ./browser/controlpanel.py:72
+#: imagetags/browser/controlpanel.py:72
 msgid "Edit cancelled"
 msgstr ""
 
-#: ./browser/templates/image.pt:167
+#: imagetags/browser/templates/image.pt:167
 msgid "Embed code (HTML)"
 msgstr ""
 
-#: ./browser/interfaces.py:11
+#: imagetags/interfaces.py:47
+msgid "Enable JavaScript replacement rules"
+msgstr ""
+
+#: imagetags/browser/interfaces.py:11
 msgid "Id"
 msgstr ""
 
-#: ./browser/interfaces.py:14
+#: imagetags/browser/interfaces.py:14
 msgid "Image field"
 msgstr ""
 
-#: ./browser/interfaces.py:15
+#: imagetags/browser/interfaces.py:15
 msgid "Image field you want to add this tag"
 msgstr ""
 
-#: ./browser/controlpanel.py:22
+#: imagetags/browser/controlpanel.py:22
+#: imagetags/profiles/default/controlpanel.xml:8
 msgid "Image tags settings"
 msgstr ""
 
-#: ./browser/interfaces.py:23
+#: imagetags/interfaces.py:20
+msgid "Improved templates"
+msgstr ""
+
+#: imagetags/interfaces.py:59
+msgid "JavaScript replacement rules"
+msgstr ""
+
+#: imagetags/browser/interfaces.py:23
 msgid "Link for the tag"
 msgstr ""
 
-#: ./browser/templates/manage.pt:27
+#: imagetags/browser/templates/manage.pt:27
 msgid "Mangage tags"
 msgstr ""
 
-#: ./browser/templates/form-ajax.pt:29
+#: imagetags/browser/templates/form-ajax.pt:29
 msgid "No"
 msgstr ""
 
-#: ./browser/templates/image.pt:126
+#: imagetags/browser/templates/image.pt:126
 msgid "No tags yet"
 msgstr ""
 
-#: ./browser/interfaces.py:27
+#: imagetags/interfaces.py:35
+msgid "Number of pixels assigned to the 'Tagged' box when calculating iframe height."
+msgstr ""
+
+#: imagetags/browser/interfaces.py:27
 msgid "Position in the X axis of the center of the box (0-100%)"
 msgstr ""
 
-#: ./browser/interfaces.py:32
+#: imagetags/browser/interfaces.py:32
 msgid "Position in the Y axis of the center of the box (0-100%)"
 msgstr ""
 
-#: ./browser/templates/form-ajax.pt:27
-#: ./browser/templates/manage.pt:48
-#: ./browser/templates/tag_title.pt:26
+#: imagetags/browser/templates/form-ajax.pt:27
+#: imagetags/browser/templates/manage.pt:48
+#: imagetags/browser/templates/tag_title.pt:26
 msgid "Remove"
 msgstr ""
 
-#: ./browser/templates/manage.pt:62
+#: imagetags/browser/templates/manage.pt:62
 msgid "Remove selected"
 msgstr ""
 
-#: ./browser/controlpanel.py:25
-#: ./browser/forms.py:75
+#: imagetags/interfaces.py:41
+msgid "Replace all inline images (inside text content or portlets) styled with 'imagetags-show' class attribute."
+msgstr ""
+
+#: imagetags/interfaces.py:40
+msgid "Replace inline images"
+msgstr ""
+
+#: imagetags/interfaces.py:63
+msgid "Rule"
+msgstr ""
+
+#: imagetags/browser/controlpanel.py:25
+#: imagetags/browser/forms.py:75
 msgid "Save"
 msgstr ""
 
-#: ./browser/templates/image.pt:145
+#: imagetags/interfaces.py:27
+msgid "Show 'Embed code (HTML)' code snippets in 'Tags' tab. Don't forget to add 'iframe' as a valid tag in safe_html  of portal_transforms. Notice that this setting won't prevent displaying iframes in documents."
+msgstr ""
+
+#: imagetags/browser/templates/image.pt:145
 msgid "Start tagging"
 msgstr ""
 
-#: ./browser/manage.py:133
-msgid "Tag "${title}" added."
+#: imagetags/browser/manage.py:133
+msgid "Tag \"${title}\" added."
 msgstr ""
 
-#: ./browser/manage.py:135
-msgid "Tag "${title}" updated."
+#: imagetags/browser/manage.py:135
+msgid "Tag \"${title}\" updated."
 msgstr ""
 
-#: ./browser/forms.py:36
+#: imagetags/browser/forms.py:36
 msgid "Tag details"
 msgstr ""
 
-#: ./browser/templates/image.pt:138
+#: imagetags/interfaces.py:34
+msgid "Tag list height"
+msgstr ""
+
+#: imagetags/browser/templates/image.pt:138
 msgid "Tag this picture"
 msgstr ""
 
-#: ./browser/templates/image.pt:117
+#: imagetags/browser/templates/image.pt:117
 msgid "Tagged:"
 msgstr ""
 
-#: ./browser/templates/manage.pt:32
+#. Default: "Tags"
+#: imagetags/profiles/default/actions.xml:6
+msgid "Tags"
+msgstr ""
+
+#: imagetags/interfaces.py:23
+msgid "Template"
+msgstr ""
+
+#: imagetags/browser/templates/manage.pt:32
 msgid "This image has no tag yet."
 msgstr ""
 
-#: ./browser/templates/manage.pt:45
+#: imagetags/browser/templates/manage.pt:45
 msgid "Title"
 msgstr ""
 
-#: ./browser/interfaces.py:20
+#: imagetags/browser/interfaces.py:20
 msgid "Title displayed in the tag"
 msgstr ""
 
-#: ./browser/templates/manage.pt:46
+#: imagetags/browser/templates/manage.pt:46
 msgid "URL"
 msgstr ""
 
-#: ./browser/interfaces.py:26
+#: imagetags/interfaces.py:26
+msgid "Use <iframe />"
+msgstr ""
+
+#: imagetags/browser/interfaces.py:26
 msgid "X position"
 msgstr ""
 
-#: ./browser/interfaces.py:31
+#: imagetags/browser/interfaces.py:31
 msgid "Y position"
 msgstr ""
 
-#: ./browser/templates/form-ajax.pt:28
+#: imagetags/browser/templates/form-ajax.pt:28
 msgid "Yes"
 msgstr ""
 
+#. Default: "Use these CSS rules below to replace standard images -in content types- with tagged images.\nThese replacement will be made via JavaScript. Providing a non-JavaScript option is better.\nIf you prefer to use a non-JavaScript option you will have to modify the view templates of the target content types by changing context.tag() call for context.@@imagetags-img(name='image_mini').You can use any available scale in image or the full image itself. Alternatively you can enable any of the default Plone 'Improved templates' above."
+#: imagetags/interfaces.py:48
+msgid "help_imagetags_settings_editform"
+msgstr ""
+"Use these CSS rules below to replace standard images -in content types- with tagged images.\n"
+"These replacement will be made via JavaScript. Providing a non-JavaScript option is better.\n"
+"If you prefer to use a non-JavaScript option you will have to modify the view templates of the target content types. Alternatively you can enable any of the default Plone 'Improved templates' above."
+
 #. Default: "-"
-#: ./browser/templates/form-ajax.pt:21
-#: ./browser/templates/image.pt:122
+#: imagetags/browser/templates/form-ajax.pt:21
+#: imagetags/browser/templates/image.pt:122
 msgid "imagetags.hyphen"
 msgstr ""
 
