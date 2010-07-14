@@ -21,146 +21,146 @@ msgstr "${count} tags borrados."
 
 #: ./browser/templates/form-ajax.pt:23
 msgid "Are you sure you want to remove this tag?"
-msgstr ¿
+msgstr "Esta seguro que desea borrar este tag?"
 
 #: ./browser/controlpanel.py:70
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: ./browser/controlpanel.py:66
 msgid "Changes saved"
-msgstr ""
+msgstr "Cambios guardados"
 
 #: ./browser/templates/manage.pt:47
 msgid "Coordinates"
-msgstr ""
+msgstr "Coordenadas"
 
 #: ./browser/templates/image.pt:152
 msgid "Done tagging"
-msgstr ""
+msgstr "Finalizar"
 
 #: ./browser/templates/tag_title.pt:30
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: ./browser/controlpanel.py:72
 msgid "Edit cancelled"
-msgstr ""
+msgstr "Edion cancelada"
 
 #: ./browser/templates/image.pt:167
 msgid "Embed code (HTML)"
-msgstr ""
+msgstr "Codigo de insercion (HTML)"
 
 #: ./browser/interfaces.py:11
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: ./browser/interfaces.py:14
 msgid "Image field"
-msgstr ""
+msgstr "Campo de imagen"
 
 #: ./browser/interfaces.py:15
 msgid "Image field you want to add this tag"
-msgstr ""
+msgstr "El campo de imagen al que desea agregar este tag"
 
 #: ./browser/controlpanel.py:22
 msgid "Image tags settings"
-msgstr ""
+msgstr "Configuracion de Image tags"
 
 #: ./browser/interfaces.py:23
 msgid "Link for the tag"
-msgstr ""
+msgstr "Vinculo para este tagi"
 
 #: ./browser/templates/manage.pt:27
 msgid "Mangage tags"
-msgstr ""
+msgstr "Administrar tags"
 
 #: ./browser/templates/form-ajax.pt:29
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: ./browser/templates/image.pt:126
 msgid "No tags yet"
-msgstr ""
+msgstr "Sin tags"
 
 #: ./browser/interfaces.py:27
 msgid "Position in the X axis of the center of the box (0-100%)"
-msgstr ""
+msgstr "Posicion del centro de la caja en el eje X (0-100%)"
 
 #: ./browser/interfaces.py:32
 msgid "Position in the Y axis of the center of the box (0-100%)"
-msgstr ""
+msgstr "Posicion del centro de la caja en el eje Y (0-100%)"
 
 #: ./browser/templates/form-ajax.pt:27
 #: ./browser/templates/manage.pt:48
 #: ./browser/templates/tag_title.pt:26
 msgid "Remove"
-msgstr ""
+msgstr "Borrar"
 
 #: ./browser/templates/manage.pt:62
 msgid "Remove selected"
-msgstr ""
+msgstr "Borrar seleccionados"
 
 #: ./browser/controlpanel.py:25
 #: ./browser/forms.py:75
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: ./browser/templates/image.pt:145
 msgid "Start tagging"
-msgstr ""
+msgstr "Agregar tags"
 
 #: ./browser/manage.py:133
 msgid "Tag "${title}" added."
-msgstr ""
+msgstr "Tag "${title}" agregado."
 
 #: ./browser/manage.py:135
 msgid "Tag "${title}" updated."
-msgstr ""
+msgstr "Tag "${title}" actualizado."
 
 #: ./browser/forms.py:36
 msgid "Tag details"
-msgstr ""
+msgstr "Detalles del tag"
 
 #: ./browser/templates/image.pt:138
 msgid "Tag this picture"
-msgstr ""
+msgstr "Agregar tags"
 
 #: ./browser/templates/image.pt:117
 msgid "Tagged:"
-msgstr ""
+msgstr "Tags:"
 
 #: ./browser/templates/manage.pt:32
 msgid "This image has no tag yet."
-msgstr ""
+msgstr "Esta imagen aun no tiene tags."
 
 #: ./browser/templates/manage.pt:45
 msgid "Title"
-msgstr ""
+msgstr "Titulo"
 
 #: ./browser/interfaces.py:20
 msgid "Title displayed in the tag"
-msgstr ""
+msgstr "Titulo que se mostrara en el tag"
 
 #: ./browser/templates/manage.pt:46
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ./browser/interfaces.py:26
 msgid "X position"
-msgstr ""
+msgstr "Posicion X"
 
 #: ./browser/interfaces.py:31
 msgid "Y position"
-msgstr ""
+msgstr "Posicion Y"
 
 #: ./browser/templates/form-ajax.pt:28
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 #. Default: "-"
 #: ./browser/templates/form-ajax.pt:21
 #: ./browser/templates/image.pt:122
 msgid "imagetags.hyphen"
-msgstr ""
+msgstr "-"
 
