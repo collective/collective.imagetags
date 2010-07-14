@@ -1,0 +1,172 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-07-14 01:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.imagetags\n"
+
+#: ./browser/manage.py:48
+msgid "${count} tag removed."
+msgstr ""
+
+#: ./browser/manage.py:50
+msgid "${count} tags removed."
+msgstr ""
+
+#: ./browser/templates/form-ajax.pt:23
+msgid "Are you sure you want to remove this tag?"
+msgstr ""
+
+#: ./browser/controlpanel.py:70
+msgid "Cancel"
+msgstr ""
+
+#: ./browser/controlpanel.py:66
+msgid "Changes saved"
+msgstr ""
+
+#: ./browser/templates/manage.pt:47
+msgid "Coordinates"
+msgstr ""
+
+#: ./browser/templates/image.pt:152
+msgid "Done tagging"
+msgstr ""
+
+#: ./browser/templates/tag_title.pt:30
+msgid "Edit"
+msgstr ""
+
+#: ./browser/controlpanel.py:72
+msgid "Edit cancelled"
+msgstr ""
+
+#: ./browser/templates/image.pt:167
+msgid "Embed code (HTML)"
+msgstr ""
+
+#: ./browser/interfaces.py:11
+msgid "Id"
+msgstr ""
+
+#: ./browser/interfaces.py:14
+msgid "Image field"
+msgstr ""
+
+#: ./browser/interfaces.py:15
+msgid "Image field you want to add this tag"
+msgstr ""
+
+#: ./browser/controlpanel.py:22
+msgid "Image tags settings"
+msgstr ""
+
+#: ./browser/interfaces.py:23
+msgid "Link for the tag"
+msgstr ""
+
+#: ./browser/templates/manage.pt:27
+msgid "Mangage tags"
+msgstr ""
+
+#: ./browser/templates/form-ajax.pt:29
+msgid "No"
+msgstr ""
+
+#: ./browser/templates/image.pt:126
+msgid "No tags yet"
+msgstr ""
+
+#: ./browser/interfaces.py:27
+msgid "Position in the X axis of the center of the box (0-100%)"
+msgstr ""
+
+#: ./browser/interfaces.py:32
+msgid "Position in the Y axis of the center of the box (0-100%)"
+msgstr ""
+
+#: ./browser/templates/form-ajax.pt:27
+#: ./browser/templates/manage.pt:48
+#: ./browser/templates/tag_title.pt:26
+msgid "Remove"
+msgstr ""
+
+#: ./browser/templates/manage.pt:62
+msgid "Remove selected"
+msgstr ""
+
+#: ./browser/controlpanel.py:25
+#: ./browser/forms.py:75
+msgid "Save"
+msgstr ""
+
+#: ./browser/templates/image.pt:145
+msgid "Start tagging"
+msgstr ""
+
+#: ./browser/manage.py:133
+msgid "Tag "${title}" added."
+msgstr ""
+
+#: ./browser/manage.py:135
+msgid "Tag "${title}" updated."
+msgstr ""
+
+#: ./browser/forms.py:36
+msgid "Tag details"
+msgstr ""
+
+#: ./browser/templates/image.pt:138
+msgid "Tag this picture"
+msgstr ""
+
+#: ./browser/templates/image.pt:117
+msgid "Tagged:"
+msgstr ""
+
+#: ./browser/templates/manage.pt:32
+msgid "This image has no tag yet."
+msgstr ""
+
+#: ./browser/templates/manage.pt:45
+msgid "Title"
+msgstr ""
+
+#: ./browser/interfaces.py:20
+msgid "Title displayed in the tag"
+msgstr ""
+
+#: ./browser/templates/manage.pt:46
+msgid "URL"
+msgstr ""
+
+#: ./browser/interfaces.py:26
+msgid "X position"
+msgstr ""
+
+#: ./browser/interfaces.py:31
+msgid "Y position"
+msgstr ""
+
+#: ./browser/templates/form-ajax.pt:28
+msgid "Yes"
+msgstr ""
+
+#. Default: "-"
+#: ./browser/templates/form-ajax.pt:21
+#: ./browser/templates/image.pt:122
+msgid "imagetags.hyphen"
+msgstr ""
+

@@ -5,12 +5,12 @@ to allow content owners to add Text/URL tags (Facebook-like tags) anchored to a 
 position of the image.
 
 Tagged image can then be displayed in:
-* News Items
-* Images
-* Fullscreen images
-by means of
-* custom templates provided with this package, or
-* replacement of images via AJAX.
+ * News Items
+ * Images
+ * Fullscreen images
+by means of:
+ * custom templates provided with this package, or
+ * replacement of images via AJAX.
 
 Showing tagged images with AJAX
 -------------------------------
