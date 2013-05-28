@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.imagetags">
+    
+    <genericsetup:registerProfile
+        name="default"
+        title="collective.imagetags"
+        directory="profiles/default"
+        description="Installs the collective.imagetags package"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+      
+    <genericsetup:importStep
+        name="kupu"
+        title="collective.imagetags: Update kupu settings"
+        description="Adds an 'imagetags-show' class in style dropdown for images"
+        handler="collective.imagetags.setuphandlers.updateKupu"
+        />
+        
+   <genericsetup:upgradeStep
+        title="Upgrade collective.imagetags"
+        description="Replaces dots with hyphens in tag ids"
+        source="*"
+        destination="1010"
+        handler="collective.imagetags.upgrades.migrate_1001_1010"
+        profile="collective.imagetags:default" />
+        
+</configure>

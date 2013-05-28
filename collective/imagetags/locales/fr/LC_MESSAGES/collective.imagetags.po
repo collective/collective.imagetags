@@ -1,0 +1,243 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-01-12 15:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: JeanMichel FRANCOIS <toutpt@gmail.com>\n"
+"Language-Team: plone-fr <plone-fr@lists.plone.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: fr\n"
+"Language-Name: French\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.imagetags\n"
+"X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch fr-fr\n"
+
+#: ./browser/manage.py:49
+msgid "${count} tag removed."
+msgstr "${count} tag supprimé."
+
+#: ./browser/manage.py:51
+msgid "${count} tags removed."
+msgstr "${count} tags supprimés"
+
+#: ./interfaces.py:60
+msgid "Add a replacement rule in each line with this format: 'Portal type|CSS img selector'."
+msgstr "Ajouter des règles de sélection pour le remplacement (une par ligne) avec ce format: 'Type de contenu|sélecteur CSS img'."
+
+#: ./browser/forms.py:153
+msgid "Are you sure you want to remove this tag?"
+msgstr "Etes-vous sûre de vouloir supprimer ce tag?"
+
+#: ./browser/controlpanel.py:69
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ./browser/controlpanel.py:65
+msgid "Changes saved"
+msgstr "Modifications sauvegardées."
+
+#: ./browser/templates/image.pt:37
+msgid "Click on objects you want to tag and then enter title and optional link."
+msgstr "Cliquer sur les éléments de l'image que vous souhaitez tagger et entrer un titre et une URL."
+
+#: ./browser/templates/manage.pt:45
+msgid "Coordinates"
+msgstr "Coordonnées"
+
+#: ./browser/interfaces.py:37
+msgid "Decimal digit"
+msgstr "Chiffre décimal"
+
+#: ./interfaces.py:21
+msgid "Default Plone templates to be overriden with tagged-images."
+msgstr "Templates de Plone par défaut à surcharger avec les images taguées."
+
+#: ./browser/templates/image.pt:38
+msgid "Done tagging"
+msgstr "Enregistrer les tags"
+
+#: ./browser/forms.py:154
+msgid "Edit"
+msgstr "Modifier"
+
+#: ./browser/controlpanel.py:71
+msgid "Edit cancelled"
+msgstr "Modifications annulées"
+
+#: ./browser/templates/image.pt:175
+msgid "Embed code (HTML)"
+msgstr "Code HTML à copier/coller"
+
+#: ./interfaces.py:47
+msgid "Enable JavaScript replacement rules"
+msgstr "Activer les règles JavaScript de remplacement"
+
+#: ./browser/interfaces.py:11
+msgid "Id"
+msgstr "Id"
+
+#: ./browser/interfaces.py:14
+msgid "Image field"
+msgstr "Champ image"
+
+#: ./browser/interfaces.py:15
+msgid "Image field you want to add this tag"
+msgstr "Le champ image surlequel vous souhaitez ajouter ce tag"
+
+#: ./browser/controlpanel.py:21
+#: ./profiles/default/actionicons.xml
+#: ./profiles/default/controlpanel.xml
+msgid "Image tags settings"
+msgstr "Préférences de imagetags"
+
+#: ./interfaces.py:20
+msgid "Improved templates"
+msgstr "Templates améliorés"
+
+#: ./interfaces.py:59
+msgid "JavaScript replacement rules"
+msgstr "Règles JavaScript de remplacement"
+
+#: ./browser/interfaces.py:23
+msgid "Link for the tag"
+msgstr "Lien du tag"
+
+#: ./browser/templates/manage.pt:27
+msgid "Manage tags"
+msgstr "Gestion des tags"
+
+#: ./browser/forms.py:154
+msgid "No"
+msgstr "Aucun"
+
+#: ./browser/templates/image.pt:133
+msgid "No tags yet"
+msgstr "Aucun tag"
+
+#: ./interfaces.py:35
+msgid "Number of pixels assigned to the 'Tagged' box when calculating iframe height."
+msgstr "Nombre de pixels assignés à la boite du tag pour le calcul de la hauteur de l'iframe."
+
+#: ./browser/interfaces.py:27
+msgid "Position in the X axis of the center of the box (0-100%)"
+msgstr "Position sur l'axe X du centre de la boite (0-100%)"
+
+#: ./browser/interfaces.py:32
+msgid "Position in the Y axis of the center of the box (0-100%)"
+msgstr "Position sur l'axe Y du centre de la boite (0-100%)"
+
+#: ./browser/forms.py:152
+#: ./browser/templates/manage.pt:46
+msgid "Remove"
+msgstr "Supprimer"
+
+#: ./browser/templates/manage.pt:61
+msgid "Remove selected"
+msgstr "Supprimer les éléments sélectionnés"
+
+#: ./interfaces.py:41
+msgid "Replace all inline images (inside text content or portlets) styled with 'imagetags-show' class attribute."
+msgstr "Remplacer toutes les images inlines (dans un contenu de texte riche ou des portlets) avec le style 'imagetags-show'."
+
+#: ./interfaces.py:40
+msgid "Replace inline images"
+msgstr "Remplacer les images inlines"
+
+#: ./interfaces.py:63
+msgid "Rule"
+msgstr "Règle"
+
+#: ./browser/controlpanel.py:24
+#: ./browser/forms.py:81
+msgid "Save"
+msgstr "Enregistrer"
+
+#: ./interfaces.py:27
+msgid "Show 'Embed code (HTML)' code snippets in 'Tags' tab. Don't forget to add 'iframe' as a valid tag in safe_html  of portal_transforms. Notice that this setting won't prevent displaying iframes in documents."
+msgstr "Affiche la boite 'Code HTML à copier/coller' dans l'onglet 'Tags'. N'oubliez pas d'ajouter le tag 'iframe' en tant que tag valide dans le Filtrage HTML si vous souhaitez l'utiliser dans vos l'éditeur de texte riche. Notez que cette préférence n'empêchera pas l'affichage des iframes dans les documents."
+
+#: ./browser/templates/image.pt:152
+msgid "Start tagging"
+msgstr "Taguer"
+
+#: ./browser/manage.py:141
+msgid "Tag '${title}' added."
+msgstr "Tag '${title}' ajouté."
+
+#: ./browser/manage.py:143
+msgid "Tag '${title}' updated."
+msgstr "Tag '${title}' mis à jour."
+
+#: ./browser/forms.py:38
+msgid "Tag details"
+msgstr "Détails du tag"
+
+#: ./interfaces.py:34
+msgid "Tag list height"
+msgstr "Hauteur de la liste des tags"
+
+#: ./browser/templates/image.pt:145
+msgid "Tag this picture"
+msgstr "Taguer cette image"
+
+#: ./browser/templates/image.pt:124
+msgid "Tagged:"
+msgstr "Taguées:"
+
+#: ./profiles/default/actions.xml
+msgid "Tags"
+msgstr "Tags"
+
+#: ./interfaces.py:23
+msgid "Template"
+msgstr "Template"
+
+#: ./browser/templates/manage.pt:30
+msgid "This image has no tag yet."
+msgstr "Cette image n'as pas encore été taguée."
+
+#: ./browser/templates/manage.pt:43
+msgid "Title"
+msgstr "Titre"
+
+#: ./browser/interfaces.py:20
+msgid "Title displayed in the tag"
+msgstr "Titre affiché dans le tag"
+
+#: ./browser/templates/manage.pt:44
+msgid "URL"
+msgstr "URL"
+
+#: ./interfaces.py:26
+msgid "Use <iframe />"
+msgstr "Utiliser <iframe />"
+
+#: ./browser/interfaces.py:26
+msgid "X position"
+msgstr "Position X"
+
+#: ./browser/interfaces.py:31
+msgid "Y position"
+msgstr "Position Y"
+
+#: ./browser/forms.py:154
+msgid "Yes"
+msgstr "Oui"
+
+#. Default: "Use these CSS rules below to replace standard images -in content types- with tagged images.\nThese replacement will be made via JavaScript. Providing a non-JavaScript option is better.\nIf you prefer to us a non-JavaScript option you will have to modify the view templates of the target content types by changing context.tag() call for context.@@imagetags-img(name='image_mini').You can use any available scale in image or the full image itself. Alternatively you can enable any of the default Plone 'Improved templates' above."
+#: ./interfaces.py:48
+msgid "help_imagetags_settings_editform"
+msgstr "Permet d'utiliser les règles CSS ci dessous pour remplacer l'affichage des images dans les types de contenu par les images taguées.\nCes remplacements seront réalisés par un script JavaScript.\nSi vous préférer ne pas utiliser JavaScript vous deverez surcharger les templates souhaités. Pour celà il faut remplacer  les appels à context.tag() par context.@@imagetags-img(name='image_mini'). Vous pouvez utiliser n'importe quelle taille d'image. Une autre alternative est d'activer les templates améliorés ci dessus."
+
+#. Default: "-"
+#: ./browser/forms.py:155
+#: ./browser/templates/image.pt:129
+msgid "imagetags.hyphen"
+msgstr "-"
+

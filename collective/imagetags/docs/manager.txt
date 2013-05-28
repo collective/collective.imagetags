@@ -1,0 +1,61 @@
+Get the ImageTagManager for an object::
+
+    >>> from collective.imagetags.adapters.interfaces import IImageTagsManager
+    >>> object = self.portal.image
+    >>> manager = IImageTagsManager(object)
+    
+Initially, there's no tag::
+
+    >>> manager.get_tags()
+    {}
+    
+Create a first tag and get its id::
+
+    >>> tag_data = {'title': 'Testing manager', 'href': 'http://plone.org/', 'x': 10.5, 'y': 30.2, 'field': 'image'}
+    >>> tag = manager.save_tag(tag_data)
+    >>> tag_id = tag[0]
+    >>> len(manager.get_tags())
+    1
+    
+The created tag is the expected one:
+
+    >>> tag[1]['title']
+    'Testing manager'
+    >>> tag[1]['href']
+    'http://plone.org/'
+    >>> '%s' % tag[1]['x']
+    '10.5'
+    >>> '%s' % tag[1]['y']
+    '30.2'
+
+Create a new tag providing the id::
+
+    >>> tag_data = {'title': 'Another tag', 'href': '', 'x': 10.5, 'y': 30.2, 'field': 'image', 'id': '1234-1234'}
+    >>> manager.save_tag(tag_data)
+    ('1234-1234', ...)
+    >>> len(manager.get_tags())
+    2
+    
+Get sorted tags::
+
+    >>> sorted = manager.get_sorted_tags()
+    >>> [x[1]['title'] for x in sorted]
+    ['Another tag', 'Testing manager']
+
+    
+Remove the first tag::
+
+    >>> manager.remove_tags(ids=['1234-1234',])
+    ['Another tag']
+    >>> '1234-1234' in manager.get_tags()
+    False
+    >>> len(manager.get_tags())
+    1
+    
+Remove the first tag::
+
+    >>> manager.remove_tags(ids=[tag_id])
+    ['Testing manager']
+    >>> manager.get_tags()
+    {}
+

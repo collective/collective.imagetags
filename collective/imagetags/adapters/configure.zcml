@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="collective.imagetags">
+
+    <!-- Adapter for tag management -->
+    <adapter
+        for="Products.Archetypes.interfaces.IBaseObject"
+        provides="collective.imagetags.adapters.interfaces.IImageTagsManager"
+        factory="collective.imagetags.adapters.manager.ImageTagsManager"
+        />
+
+
+    <!-- Dummy adapter for IAddTag related form -->
+    <adapter 
+        for="Products.Archetypes.interfaces.IBaseObject"
+        provides="collective.imagetags.adapters.interfaces.IAddTag"    
+        factory="collective.imagetags.adapters.forms.AddTagAdapter" 
+        />
+
+
+</configure>

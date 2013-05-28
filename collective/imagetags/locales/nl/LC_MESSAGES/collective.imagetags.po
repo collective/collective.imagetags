@@ -1,0 +1,242 @@
+# Translators:
+# Fred van Dijk <f.van.dijk@zestsoftware.nl>, 2010
+# Maurits van Rees <m.van.rees@zestsoftware.nl>, 2010
+msgid ""
+msgstr ""
+"Project-Id-Version: collective.imagetags 1.0\n"
+"POT-Creation-Date: 2011-01-12 15:24+0000\n"
+"PO-Revision-Date: 2011-01-12 16:20 +0100\n"
+"Last-Translator: Maurits van Rees <m.van.rees@zestsoftware.nl>\n"
+"Language-Team: Dutch <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: nl\n"
+"Language-Name: Nederlands\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.imagetags\n"
+
+#: ./browser/manage.py:49
+msgid "${count} tag removed."
+msgstr "${count} markering verwijderd"
+
+#: ./browser/manage.py:51
+msgid "${count} tags removed."
+msgstr "${count} markering verwijderd"
+
+#: ./interfaces.py:60
+msgid "Add a replacement rule in each line with this format: 'Portal type|CSS img selector'."
+msgstr "Voeg een vervangingsregel toe op elke regel met dit formaat: 'Portal type|CSS img selector'."
+
+#: ./browser/forms.py:153
+msgid "Are you sure you want to remove this tag?"
+msgstr "Weet u zeker dat u deze markering wilt verwijderen?"
+
+#: ./browser/controlpanel.py:69
+msgid "Cancel"
+msgstr "Afbreken"
+
+#: ./browser/controlpanel.py:65
+msgid "Changes saved"
+msgstr "Wijzigingen bewaard"
+
+#: ./browser/templates/image.pt:37
+msgid "Click on objects you want to tag and then enter title and optional link."
+msgstr "Klik op objecten die u wilt markeren en voeg dan een titel en optioneel een link toe."
+
+#: ./browser/templates/manage.pt:45
+msgid "Coordinates"
+msgstr "Coördinaten"
+
+#: ./browser/interfaces.py:37
+msgid "Decimal digit"
+msgstr "Decimaal getal"
+
+#: ./interfaces.py:21
+msgid "Default Plone templates to be overriden with tagged-images."
+msgstr "Standaard Plone templates die worden overschreven met 'tagged-images'"
+
+#: ./browser/templates/image.pt:38
+msgid "Done tagging"
+msgstr "Markeren gedaan"
+
+#: ./browser/forms.py:154
+msgid "Edit"
+msgstr "Bewerken"
+
+#: ./browser/controlpanel.py:71
+msgid "Edit cancelled"
+msgstr "Bewerken afgebroken"
+
+#: ./browser/templates/image.pt:175
+msgid "Embed code (HTML)"
+msgstr "Voeg code in (HTML)"
+
+#: ./interfaces.py:47
+msgid "Enable JavaScript replacement rules"
+msgstr "Activeer Javascript vervangingsregels"
+
+#: ./browser/interfaces.py:11
+msgid "Id"
+msgstr "Id"
+
+#: ./browser/interfaces.py:14
+msgid "Image field"
+msgstr "Afbeeldingsveld"
+
+#: ./browser/interfaces.py:15
+msgid "Image field you want to add this tag"
+msgstr "Afbeeldingsveld waar u deze markering toevoegt"
+
+#: ./browser/controlpanel.py:21
+#: ./profiles/default/actionicons.xml
+#: ./profiles/default/controlpanel.xml
+msgid "Image tags settings"
+msgstr "Image tags voorkeuren"
+
+#: ./interfaces.py:20
+msgid "Improved templates"
+msgstr "Verbeterde templates"
+
+#: ./interfaces.py:59
+msgid "JavaScript replacement rules"
+msgstr "Javascript vervangingsregels"
+
+#: ./browser/interfaces.py:23
+msgid "Link for the tag"
+msgstr "Link voor de markering"
+
+#: ./browser/templates/manage.pt:27
+msgid "Manage tags"
+msgstr "Beheer markeringen"
+
+#: ./browser/forms.py:154
+msgid "No"
+msgstr "Nee"
+
+#: ./browser/templates/image.pt:133
+msgid "No tags yet"
+msgstr "Er zijn nog geen markeringen"
+
+#: ./interfaces.py:35
+msgid "Number of pixels assigned to the 'Tagged' box when calculating iframe height."
+msgstr "Aantal pixels die horen bij de gemarkeerde rechthoek als het iframe berekend wordt"
+
+#: ./browser/interfaces.py:27
+msgid "Position in the X axis of the center of the box (0-100%)"
+msgstr "Locatie op de X-as vanaf het midden van de rechthoek (0-100%)"
+
+#: ./browser/interfaces.py:32
+msgid "Position in the Y axis of the center of the box (0-100%)"
+msgstr "Locatie op de Y-as vanaf het midden van de rechthoek (0-100%)"
+
+#: ./browser/forms.py:152
+#: ./browser/templates/manage.pt:46
+msgid "Remove"
+msgstr "Verwijder"
+
+#: ./browser/templates/manage.pt:61
+msgid "Remove selected"
+msgstr "Verwijder geselecteerde"
+
+#: ./interfaces.py:41
+msgid "Replace all inline images (inside text content or portlets) styled with 'imagetags-show' class attribute."
+msgstr "Vervang alle inline afbeeldingen (in tekst-content of portlets) opgemaakt met het 'imagetags-show' CSS class attribuut"
+
+#: ./interfaces.py:40
+msgid "Replace inline images"
+msgstr "Vervang inline afbeeldingen"
+
+#: ./interfaces.py:63
+msgid "Rule"
+msgstr "Regel"
+
+#: ./browser/controlpanel.py:24
+#: ./browser/forms.py:81
+msgid "Save"
+msgstr "Bewaar"
+
+#: ./interfaces.py:27
+msgid "Show 'Embed code (HTML)' code snippets in 'Tags' tab. Don't forget to add 'iframe' as a valid tag in safe_html  of portal_transforms. Notice that this setting won't prevent displaying iframes in documents."
+msgstr "Toon 'Embed code (HTML)' code in het 'Markeringen' tabblad. Vergeet niet om 'iframe' als een geldige HTML tag in safe_html of portal_transforms aan te melden. Deze instelling voorkomt niet dat iframes in documenten worden getoond."
+
+#: ./browser/templates/image.pt:152
+msgid "Start tagging"
+msgstr "Start met markeren"
+
+#: ./browser/manage.py:141
+msgid "Tag '${title}' added."
+msgstr "Markering '${title}' toegevoegd"
+
+#: ./browser/manage.py:143
+msgid "Tag '${title}' updated."
+msgstr "Markering '${title}' bijgewerkt"
+
+#: ./browser/forms.py:38
+msgid "Tag details"
+msgstr "Details van de markering"
+
+#: ./interfaces.py:34
+msgid "Tag list height"
+msgstr "Hoogte markeringslijst"
+
+#: ./browser/templates/image.pt:145
+msgid "Tag this picture"
+msgstr "Markeer deze afbeelding"
+
+#: ./browser/templates/image.pt:124
+msgid "Tagged:"
+msgstr "Gemarkeerd"
+
+#: ./profiles/default/actions.xml
+msgid "Tags"
+msgstr "Markeringen"
+
+#: ./interfaces.py:23
+msgid "Template"
+msgstr "Template"
+
+#: ./browser/templates/manage.pt:30
+msgid "This image has no tag yet."
+msgstr "Deze afbeelding heeft nog geen markering"
+
+#: ./browser/templates/manage.pt:43
+msgid "Title"
+msgstr "Titel"
+
+#: ./browser/interfaces.py:20
+msgid "Title displayed in the tag"
+msgstr "Titel die getoond wordt in de markering"
+
+#: ./browser/templates/manage.pt:44
+msgid "URL"
+msgstr "URL"
+
+#: ./interfaces.py:26
+msgid "Use <iframe />"
+msgstr "Gebruik <iframe />"
+
+#: ./browser/interfaces.py:26
+msgid "X position"
+msgstr "X positie"
+
+#: ./browser/interfaces.py:31
+msgid "Y position"
+msgstr "Y positie"
+
+#: ./browser/forms.py:154
+msgid "Yes"
+msgstr "Ja"
+
+#. Default: "Use these CSS rules below to replace standard images -in content types- with tagged images.\nThese replacement will be made via JavaScript. Providing a non-JavaScript option is better.\nIf you prefer to us a non-JavaScript option you will have to modify the view templates of the target content types by changing context.tag() call for context.@@imagetags-img(name='image_mini').You can use any available scale in image or the full image itself. Alternatively you can enable any of the default Plone 'Improved templates' above."
+#: ./interfaces.py:48
+msgid "help_imagetags_settings_editform"
+msgstr "Gebruik deze CSS regels om standaard afbeeldingen (in content types) te vervangen met gemarkeerde afbeeldingen. Dit wordt met Javascript gedaan. Een vervanging die niet afhankelijk is van javascript is beter. Hiervoor moet u de view template van het doel content type wijzigen: de context.tag() call voor context.@@imagetags-img(name='image_mini'). U kunt elke beschikbare schaling van de afbeelding gebruik of het origineel (full image). Als alernatief zijn de standaard Plone 'verbeterde templates' hierboven te activeren."
+
+#. Default: "-"
+#: ./browser/forms.py:155
+#: ./browser/templates/image.pt:129
+msgid "imagetags.hyphen"
+msgstr "-"
+

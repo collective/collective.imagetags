@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<action-icons 
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="collective.imagetags">
+ <action-icon category="controlpanel" action_id="imagetags"
+              title="Image tags settings" priority="0"
+              icon_expr="++resource++collective.imagetags/icon.png"
+              i18n:attributes="title" />
+</action-icons>
