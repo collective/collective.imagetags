@@ -1,11 +1,110 @@
 Changelog
 =========
 
-1.1
----
+1.5.1 (unreleased)
+------------------
+
+1.5 (2011-05-11)
+----------------
+- Remove simplejson dependency (add it in extra require for plone3 
+  compatibility) [toutpt]
+- Update provided buildout to use plone4. old one has been renamed and 
+  updated to test-plone3.cfg [toutpt]
+- Add french translation [toutpt]
+- Moved tag management to new adapter [marcosfromero]
+- Changed tag ids with hyphens instead of dots [marcosfromero]
+- Minor improvement in js_labels to avoid translation errors [marcosfromero]
+- Tweaks to improve tag rendering and managing [marcosfromero]
+- **Important:** Upgrade step to migrate tag ids [marcosfromero]
+
+1.4.6 (2011-04-26)
+------------------
+- Bug fix in AJAX image replacement and ifrmaes that made no image being 
+  displayed at all.
+- Bug fix in improved templates that used to duplicate html and body tags.
+- Better embedding code for iframes.
+- Bug fix in Plone 3 when unprotecting formUnload.
+- CSS tweaks to provide tag hints when entering the tagged area and to 
+  re-layout tag labels.
+
+1.4.5 (2011-04-24)
+------------------
+- Added MANIFEST.in file to make sure to include mo files in egg.
+- Added formats=zip in setup.cfg to prevent some obscure bug in Python 2.4
+  (see https://lists.plone.org/pipermail/zopeskel/2011-April/000108.html).
+
+
+1.4.4 (2011-01-24)
+------------------
+- Added missing Spanish translations
+- Dropped ajax-form to use regular form improved with jQuery/jQueryUI
+- Moved ImageTagsLabels from old ajax-form to a new browser view
+- Minor bug fixes in JS for Plone 3
+- Improved decimal separator handling in JavaScript (see change 1.4.2)
+- Test updated according to above changes
+- Tested in Plone 4.0.3
+
+1.4.3 (2011-01-12)
+------------------
+- Fixed JavaScript to also correctly create a tag the second time 
+  [maurits]
+- Added internationalization to some missing terms [maurits]
+- Dutch translation [fvandijk]
+
+1.4.2 (2011-01-10)
+------------------
+- Replace JavaScript (x,y) decimal separator with server expected 
+  decimal separator (thanks to maurits)
+
+1.4.1 (2011-01-06)
+------------------
+- Added imagetags-show class available at paragraph_styles in kupu
+- Added actionicons.xml for Plone 3
+
+1.4 (2010-12-27)
+----------------
+- Backported to Plone 3
+- Tested in Plone 4.0.2 and Plone 3.3.5
+- Added known good set for Plone 3 installation (read ``INSTALL.txt``)
+
+1.3.3 (2010-11-12)
+------------------
+- UI improvements when tagging images in @@imagetags-manage
+
+1.3.2 (2010-09-21)
+------------------
+- Added simplejson dependency, which is used to automatically create 
+  JSON from Python objects (thanks to kojiro)
+- Change http headers for JSON responses: added content-length, 
+  changed mimetype for ``application/json`` (thanks to MacYET3)
+- Test updated according to above changes
+- Tested in Plone 4.0
+
+1.3.1 (2010-07-27)
+------------------
+- Updated documentation
+- Bug fix in po files and incorrect translation in AJAX form (forms.py)
+
+1.3 (2010-07-25)
+----------------
+- Cleaner markup (more JavaScript work)
+- Small change in CSS (``z-index`` from 200 to 150) required by 
+  `collective.collage.imagetags 
+  <http://pypi.python.org/pypi/collective.collage.imagetags>`_
+
+1.2 (2010-07-20)
+----------------
+- Show tags sorted by title field
+- Added get_sorted_tags to browser/manage.py
+- Moved available_sizes, tag_box, tag_title and portal_url from 
+  browser/helper.py to browser/image.py (more sensible)
+- Completed browser.interfaces.IImageTagsImage interface
+
+1.1 (2010-07-16)
+----------------
 - i18n support
 - Spanish translation
 
-1.0
--------------------
+1.0 (2010-07-13)
+----------------
 - Initial release

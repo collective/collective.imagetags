@@ -19,8 +19,7 @@
       />
   
 
-  <!-- Form related directives-->
-  
+  <!-- Add tag form -->
   <browser:page
       for="Products.Archetypes.interfaces.IBaseObject"
       name="imagetags-form"
@@ -28,24 +27,9 @@
       permission="cmf.ModifyPortalContent" 
       layer="collective.imagetags.interfaces.IImageTagsLayer"
       />
-
-  <browser:page
-      for="Products.Archetypes.interfaces.IBaseObject"
-      name="imagetags-form-ajax"
-      class="collective.imagetags.browser.forms.AddTagAjax"
-      permission="cmf.ModifyPortalContent"
-      layer="collective.imagetags.interfaces.IImageTagsLayer"
-      />
-      
-  <adapter 
-      for="Products.Archetypes.interfaces.IBaseObject"
-      provides="collective.imagetags.browser.forms.IAddTag"    
-      factory="collective.imagetags.browser.forms.AddTagAdapter" 
-      />
       
 
   <!-- Tags manager -->
-
   <browser:page
       for="Products.Archetypes.interfaces.IBaseObject"
       name="imagetags-manage"
@@ -107,5 +91,12 @@
         layer="collective.imagetags.interfaces.IImageTagsLayer"
         />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="imagetagslabels.js"
+      class="collective.imagetags.browser.js_labels.JSLabels"
+      permission="zope2.View"
+      layer="collective.imagetags.interfaces.IImageTagsLayer"
+      />
 
 </configure>

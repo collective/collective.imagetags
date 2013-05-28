@@ -2,13 +2,28 @@
 
 jQuery(document).ready(function() {
     if(jQuery('.tag-image-wrapper').length) {
+        // Mark management screen as inline managing
         jQuery('.tag-manage').removeClass('tag-manage').addClass('tag-manage-inline');
-        jQuery('#imagetags-form, #imagetags-manage').hide();
+        // Hide table of tags management; 'Tag details' fieldset; and ajax-form div, containing the very form
+        jQuery('#imagetags-manage, #imagetags-form, #ajax-form').hide();
+        // Hide x, y fields
+        jQuery('#form-widgets-x, #form-widgets-y').each(function(idx, el) {
+            jQuery(el).closest('div.field').hide();
+        });
         jQuery('#tag-start-tagging').show().click(ImageTags.startTagging);
         jQuery('#tag-stop-tagging').click(ImageTags.stopTagging);
+        // Remove unload protection from forms (taken from formUnload.js)
+        var tool = window.onbeforeunload && window.onbeforeunload.tool;
+        if (tool) {
+            try {
+                tool.removeForms.apply(tool, jQuery('form.enableUnloadProtection').get());
+            } catch(err) {
+                // do nothing
+            }
+        }
         // auto-select input fields
         jQuery('.tag-embed-code input').focus(function(event) {event.target.select();});
-        ImageTags.prepareEmbedOptions()
+        ImageTags.prepareEmbedOptions();
     }
 
 });
@@ -26,9 +41,24 @@ ImageTags = {
     version: '1.0',
     title: 'ImageTags',
     description: 'Client side managing of image tags',
-    hyphen: ' - ',
     draggableConfig: {revert: false, cancel: 'span.tag-link-title'},
-    saveButton: 'Save',
+    initiated: false,
+    
+    initTagging: function() {
+        /* Initial setup that doesn't need to be done again
+         */
+        // Find the form and bind its "onsubmit" event
+        var formContainer = jQuery('#ajax-form');
+        var form = formContainer.find('form');
+        form.submit(ImageTags.submitForm);
+        // Add keyup event to required fields
+        form.find('input.required').keyup(ImageTags.checkRequired);    
+        // Hide save button and allow multi submit
+        form.find('input.submit-widget').hide().addClass('allowMultiSubmit');
+        ImageTags.draggableConfig['stop'] = ImageTags.onBoxStopDragging;
+        ImageTags.draggableConfig['start'] = ImageTags.onBoxStartDragging;
+        ImageTags.initiated = true;
+    },
 
     startTagging: function(event) {
         /* When "Start tagging" link is pressed, perform the following actions
@@ -39,28 +69,31 @@ ImageTags = {
         }
         // Hide #tag-start link and show tag-stop link
         jQuery('#tag-start-tagging').hide();
-        jQuery('#tag-stop-tagging').show();
-        // Find the form and bind its "onsubmit" event
-        var formContainer = jQuery('#ajax-form');
-        var form = formContainer.find('form');
-        form.submit(ImageTags.submitForm);
-        // Add onblur event to required fields (span.required is sibling of div.widget with input children)
-        form.find('.fieldRequired').next().find('input').keyup(ImageTags.checkRequired);
+        jQuery('html, body').animate({scrollTop: jQuery('#tag-stop-tagging-box').show().offset().top-10}, 1000);
+        if(!ImageTags.initiated) {
+            ImageTags.initTagging();
+        }
+
         // Add a special tag-tagging class and bind click event on the wrapper
         jQuery('.tag-image-wrapper').addClass('tag-tagging').click(ImageTags.onWrapperClick);
         // Turns boxes (a.tag-link) into draggable, bind the stop event and add a special class to them
-        ImageTags.draggableConfig['stop'] = ImageTags.onBoxStopDragging;
-        ImageTags.draggableConfig['start'] = ImageTags.onBoxStartDragging;
         ImageTags.turnDraggable(jQuery('.tag-image-wrapper a.tag-link'));
+        // Create helper action links in tag-tagging box
+        ImageTags.createActionLinks(jQuery('.tag-link-plain'));
         // Add a special tag-tagging class to the a.tag-plain links
         jQuery('.tag-tag-list').addClass('tag-tagging');
         // Bind click event to a.tag-edit links
         ImageTags.turnEditable(jQuery('.tag-edit'));
+        // Create a 'confirm remove' box
+        jQuery('body').after('<div style="display: none; " id="imagetags-confirm-remove">' + ImageTagsLabels.removeConfirmText + '</div>');
         // Bind click event to a.tag-remove links
-        ImageTags.turnRemovable(jQuery('.tag-remove'));
-        // Re-set ImageTags.hyphen and ImageTags.saveButton values based on markup (it could change according to translations)
-        ImageTags.hyphen = jQuery('#imagetags-hyphen').text();
-        ImageTags.saveButton = form.find('input.submit-widget').hide().addClass('allowMultiSubmit').val()
+        ImageTags.turnRemovable(jQuery('.tag-remove, .tag-cross'));
+        // Bind hover event to a.tag-cross to provide hover effect
+        jQuery('.tag-cross').hover(function() {
+            jQuery(this).addClass('ui-state-active');
+        }, function() {
+            jQuery(this).removeClass('ui-state-active');
+        });
         // Bind click event to a.tag-link-plain to disable real links
         ImageTags.preventRealLink(jQuery('.tag-link-plain'));
     },
@@ -75,7 +108,7 @@ ImageTags = {
         }
         // Show / Hide Start / Stop links
         jQuery('#tag-start-tagging').show();
-        jQuery('#tag-stop-tagging').hide();
+        jQuery('#tag-stop-tagging-box').fadeOut();
         // Remove class and click event handler
         jQuery('.tag-image-wrapper').removeClass('tag-tagging').unbind('click', ImageTags.onWrapperClick);
         // Destroy draggable objects
@@ -88,6 +121,17 @@ ImageTags = {
         jQuery('.tag-link-plain').unbind('click', ImageTags.onRealLinkClick);
         // Restore the original linksOverOut behavior to tag list (hover -> show box).
         ImageTags.linksOverOut();
+    },
+    
+    contextUrl: function() {
+        /* Calculates the objects URL
+        */
+        var url = document.location.href;
+        if(url.indexOf('?')>-1) {
+            url = url.substring(0, url.indexOf('?'));
+        }
+        return url;
+
     },
     
     turnDraggable: function(collection) {
@@ -106,6 +150,26 @@ ImageTags = {
         /* Turn collection into removable (i.e. bind click event)
          */
         collection.click(ImageTags.onRemoveLinkClick);
+    },
+    
+    createActionLinks: function(collection) {
+        var url = ImageTags.contextUrl();
+        collection.each(function(idx, el) {
+            var id = el.id.replace('image-tag-link-plain-', '');
+            // If editLink exists, we don't need to create it again
+            var editLink = jQuery('#image-tag-edit-' + id);
+            if(editLink.length===0) {
+                var buffer = [];
+                buffer.push(' <span class="tag-actions">(');
+                buffer.push('<a class="tag-remove" href="' + url + '?form.widgets.remove:list=' + id + '&ajax:int=1">' + ImageTagsLabels.removeLinkText + '</a>');
+                buffer.push(' | ');
+                buffer.push('<a class="tag-edit" id="image-tag-edit-' + id + '" href="' + url + '?id=' + id + '">' + ImageTagsLabels.editLinkText + '</a>');
+                buffer.push(')</span>');
+                jQuery(el).after(buffer.join('\n'));
+                // We also create an icon-link inside the tag-link
+                jQuery('#image-tag-' + id).append('<a class="tag-cross ui-state-default" href="' + url + '?form.widgets.remove:list=' + id + '&ajax:int=1" title="' + ImageTagsLabels.removeLinkText + '"><span class="ui-icon ui-icon-closethick">' + ImageTagsLabels.removeLinkText + '</span></a>');
+            }
+        });
     },
 
     preventRealLink: function(collection){
@@ -127,22 +191,22 @@ ImageTags = {
         var newX = ui.position.left + box.width()/2;
         var newY = ui.position.top + box.height()/2;
         // Calculate real final position (0%<=position<=100%)
-        var finalPosition = {}
+        var finalPosition = {};
         if(newX<0) {
-            newX = 0;
-            finalPosition['left'] = (newX - box.width()/2) + 'px';
+            newX = -box.width()/2;
+            finalPosition['left'] = newX + 'px';
         }
         if(newX>wWidth) {
-            newX = wWidth;
-            finalPosition['left'] = (newX - box.width()/2) + 'px';
+            newX = (wWidth - box.width()/2);
+            finalPosition['left'] = newX + 'px';
         }
         if(newY>wHeight) {
-            newY = wHeight;
-            finalPosition['top'] = (newY - box.height()/2) + 'px';
+            newY = (wHeight - box.height()/2);
+            finalPosition['top'] = newY + 'px';
         }
         if(newY<0) {
-            newY = 0;
-            finalPosition['top'] = (newY - box.height()/2)+ 'px';
+            newY = -box.height()/2;
+            finalPosition['top'] = newY + 'px';
         }
         // If "desired" position is out of limits, re-place the box
         if(finalPosition['top'] !== undefined || finalPosition['left'] !== undefined) {
@@ -152,10 +216,9 @@ ImageTags = {
         var perX = Math.min(100, Math.max(0, (newX/wWidth*100).toFixed(1)));
         var perY = Math.min(100, Math.max(0, (newY/wHeight*100).toFixed(1)));
         // Prepare data to be sent to server
-        var id = box.attr('id').replace('image-tag-', '').replace('-', '.');
+        var id = box.attr('id').replace('image-tag-', '');
         var title = box.find('.tag-link-title').text();
         var url = box.attr('href') || '';
-        var form = jQuery('#ajax-form form');
         var data = {'x': perX, 'y': perY, 'id': id, 'title': title, 'url': url, 'ajax': 1};
         // Pre-load form (invisibly) to be submitted.
         ImageTags.loadForm(data);
@@ -167,6 +230,7 @@ ImageTags = {
         /* Called when dragging starts. Used to change class of object being dragged 
          */
         ui.helper.addClass('tag-link-active');
+        ImageTags.hideForm();
     },
     
     onWrapperClick: function(event) {
@@ -191,16 +255,17 @@ ImageTags = {
          */
         // Get wrapper and offset to take box x,y position
         var wrapper = box.closest('.tag-image-wrapper');
+        wrapper.find('.tag-link-active').removeClass('tag-link-active');
         var wWidth = wrapper.width();
         var wHeight = wrapper.height();
-        var position = box.position()
+        var position = box.position();
         var newX = position.left /*- offsetW.left*/ + box.width()/2;
         var newY = position.top /*- offsetW.top*/ + box.height()/2;
         // Translate X,Y into percentages
         var perX = Math.min(100, Math.max(0, (newX/wWidth*100).toFixed(1)));
         var perY = Math.min(100, Math.max(0, (newY/wHeight*100).toFixed(1)));
         // Pre-load data on the form
-        var id = box.attr('id').replace('image-tag-', '').replace('-','.');
+        var id = box.attr('id').replace('image-tag-', '');
         var title = box.find('.tag-link-title').text();
         var url = box.attr('href');
         box.addClass('tag-link-active');
@@ -228,22 +293,30 @@ ImageTags = {
         event.stopPropagation();
         // Call to confirm dialog
         var confirmDiv = jQuery('#imagetags-confirm-remove');
-        var yes = confirmDiv.find('span').first().text();
-        var no = confirmDiv.find('span').last().text()
-        var buttons = {}
-        buttons[no] = function() {
+        // Set removeLink href to confirmDiv data. This is because of some issue with jquery 1.3.2 (Plone 3)
+        var link = jQuery(event.target).closest('a');
+        confirmDiv.data('removeLinkURL', link.attr('href'));
+        
+        var buttons = {};
+        buttons[ImageTagsLabels.noButtonText] = function() {
             jQuery(this).dialog('close');
         };
-        buttons[yes] = function() {
+        buttons[ImageTagsLabels.yesButtonText] = function() {
             jQuery(this).dialog('close');
-            jQuery.get(event.target.href + '&ajax:int=1', ImageTags.onRemoveSuccess);
+            var confirmDiv = jQuery('#imagetags-confirm-remove')
+            var removeLinkURL = confirmDiv.data('removeLinkURL');
+            confirmDiv.data('removeLinkURL', null)
+            jQuery.get(removeLinkURL, ImageTags.onRemoveSuccess);
         };
+        // Separate dialog open in two lines due to some issue with jquery-ui 1.7.2 (Plone 3)
         confirmDiv.dialog({
-            title: confirmDiv.find('em').text(), 
+            autoOpen: false,
+            title: ImageTagsLabels.removeLinkText,
             resizable: false,
             buttons: buttons,
             modal: true
-        })
+        });
+        confirmDiv.dialog('open');
     },
 
     onRealLinkClick: function(event) {
@@ -280,35 +353,51 @@ ImageTags = {
         var prefix = 'form.widgets.';
         // Set default values in the form
         jQuery.each(config, function(field, value) {
+            if(field=='x' || field=='y') {
+                value = ImageTags.replaceDecimalSeparator(value);
+            }
+            if(field=='url') {
+                value = value=='#' ? '' : value;
+            }
             form.find('input[name=' + prefix + field + ']').val(value);
         });
+    },
+    
+    hideForm: function() {
+        /* Reset and hide tag details form
+         */
+        var formContainer = jQuery('#ajax-form');
+        ImageTags.resetForm();
+        formContainer.dialog('close');         
     },
 
     showForm: function(box) {
         /* Display the edit tag details form
          */
         var formContainer = jQuery('#ajax-form');
-        // Get the title
-        var title = formContainer.find('h2').hide().text();
-        // onclose function
-        var onclose = function(event, ui) {
-            ImageTags.resetForm();
-            if(box) {
-                box.removeClass('tag-link-active');
-            }
-        };
         // Display the form dialog
         buttons = {};
-        buttons[ImageTags.saveButton] = ImageTags.submitForm;
+        buttons[ImageTagsLabels.saveButtonText] = ImageTags.submitForm;
+        // Separate dialog open in two lines due to some issue with jquery-ui 1.7.2 (Plone 3)
         formContainer.dialog({
-            title: title, 
+            title: ImageTagsLabels.tagFormTitle, 
             resizable: false,
-            close: onclose,
             open: function(event, ui) {
-                jQuery(this).find('input[type!=hidden]').first().focus();
+                jQuery(this).find('input[type!=hidden]:first').focus();
             },
             buttons: buttons
         });
+        // onclose function. It gets the box as extra data to remove a css class name
+        var onclose = function(event, ui) {
+            ImageTags.resetForm();
+            if(event.data && event.data[0]) {
+                var box = jQuery(event.data[0]);
+                box.removeClass('tag-link-active');
+            }
+        };
+        formContainer.bind('dialogclose', box, onclose);
+        formContainer.dialog('open');
+        
     },
     
     submitForm: function(event) {
@@ -333,14 +422,14 @@ ImageTags = {
         var button = form.find('input[type=submit]')[0];
         
         // Post data to the server
-        jQuery.post(form.attr('action'), form.serialize() + '&' + button.name + '=' + button.value, onPostSuccess);
+        jQuery.post(form.attr('action'), form.serialize() + '&ajax:int=1&' + button.name + '=' + button.value, onPostSuccess);
     },
     
     resetForm: function() {
         /* Reset the form to empty values (except for the "field"-named field)
          */
         var container = jQuery('#ajax-form');
-        container.find('input[type!=submit],select,textarea').not('input[name$=field:list],input[name$=ajax]').val('');
+        container.find('input[type!=submit],select,textarea').not('input[name$=field:list],input[name$=ajax],input[name$=decimal]').val('');
         container.find('.field-missing-value').removeClass('field-missing-value');
     },
 
@@ -351,29 +440,38 @@ ImageTags = {
         jQuery('#ajax-form').dialog('close');
         ImageTags.resetForm();
         // Take the response data and show/update boxes or tags
-        var root = jQuery(request.responseXML.documentElement);
+        var root = request ? jQuery(request.responseXML.documentElement) : jQuery(data.documentElement);
         var id = root.attr('id');
         var boxHTML = root.find('box');
         var titleHTML = root.find('title');
-        var safeId = id.replace('.','-');
-        var box = jQuery('#image-tag-' + safeId);
+        var box = jQuery('#image-tag-' + id);
         var plainTags;
         if(box.length>0) {
             box.replaceWith(boxHTML.text());
-            plainTags = jQuery('#image-tag-plain-' + safeId).replaceWith(titleHTML.text());
+            plainTags = jQuery('#image-tag-plain-' + id).replaceWith(titleHTML.text());
         } else {
             // Create a new tag-link box and turn it into draggable
-            ImageTags.turnDraggable(jQuery('.tag-image-wrapper').append(boxHTML.text()).children().last());
+            jQuery('.tag-image-wrapper').append(boxHTML.text());
             // Create the new tag-plain link
             plainTags = jQuery('.tag-plain-tags');
-            plainTags.append((plainTags.children().length > 0 ? ImageTags.hyphen : '') + titleHTML.text());
+            plainTags.append((plainTags.children().length > 0 ? '<span class="tag-hyphen">' + ImageTagsLabels.hyphenLabel + '</span>': '') + titleHTML.text());
             plainTags.show().parent().find('.tag-plain-no-tag').hide();
         }
         // Modify events of newly created elements in the page
-        ImageTags.turnDraggable(jQuery('#image-tag-' + safeId));
-        ImageTags.preventRealLink(jQuery('#image-tag-link-plain-' + safeId));
-        ImageTags.turnEditable(jQuery('#image-tag-plain-' + safeId + ' .tag-edit'));
-        ImageTags.turnRemovable(jQuery('#image-tag-plain-' + safeId + ' .tag-remove'));
+        ImageTags.turnDraggable(jQuery('#image-tag-' + id));
+        ImageTags.preventRealLink(jQuery('#image-tag-link-plain-' + id));
+        ImageTags.createActionLinks(jQuery('#image-tag-link-plain-' + id));
+        ImageTags.turnEditable(jQuery('#image-tag-plain-' + id + ' .tag-edit'));
+        ImageTags.turnRemovable(jQuery('#image-tag-plain-' + id + ' .tag-remove'));
+        var cross = jQuery('#image-tag-' + id + ' .tag-cross');
+        ImageTags.turnRemovable(cross);
+        // Bind hover event to a.tag-cross to provide hover effect
+        cross.hover(function() {
+            jQuery(this).addClass('ui-state-active');
+        }, function() {
+            jQuery(this).removeClass('ui-state-active');
+        });
+        
 
     },
     
@@ -381,28 +479,36 @@ ImageTags = {
         /* Called after removal success
          */
 
-        // Get the removed box/label and remove them
-        var json = eval('(' + data + ')');
+        // Get the removed box/label and remove them (together with corresponding hyphens)
+        var json = data.removed ? data : eval('(' + data + ')');
         var removed = json.removed;
         jQuery.each(removed, function(pos, id) {
-            var safeId = id.replace('.', '-');
-            jQuery('#image-tag-' + safeId + ', #image-tag-plain-' + safeId).remove();
-        });
-        // Once removed, re-write tag-list with the corresponding hyphens.
-        var plainTags = jQuery('.tag-plain-tags');
-        var children = plainTags.children().clone(true);
-        plainTags.empty();
-        children.each(function(pos, el) {
-            plainTags.append(el);
-            if(pos<children.length-1) {
-                plainTags.append(ImageTags.hyphen);
+            jQuery('#image-tag-' + id).remove();
+            var plainTag = jQuery('#image-tag-plain-' + id);
+            if(plainTag.prev().length===0) {
+                plainTag.next().remove();
+            } else {
+                plainTag.prev().remove();
             }
+            plainTag.remove();
         });
+        var plainTags = jQuery('.tag-plain-tags');
         // If all labels were removed, show "No tags yet" legend.
-        if(children.length==0) {
+        if(plainTags.children().length===0) {
             plainTags.hide().parent().find('.tag-plain-no-tag').show();
 
         }
+    },
+    
+    replaceDecimalSeparator: function(number) {
+        // Replace JavaScript number decimal separator with server expected decimal separator
+        var separator = ImageTagsLabels.decimalSeparator;
+        if(separator!='.') {
+            return number.toString().replace('.', separator);
+        } else {
+            return number;
+        }
+
     },
     
     checkRequired: function(event) {
@@ -421,18 +527,24 @@ ImageTags = {
          * into more fancy radio-buttons to show embed options
          */
         var code = jQuery('.tag-embed-code').removeClass('tag-embed-code').addClass('tag-embed-code-dyn');
+        var dd = code.find('dd');
         var labels = code.find('label').hide();
-        var inputs = code.find('input').hide();
-        var brs = code.find('br').remove();
+        code.find('input').hide();
+        code.find('br').remove();
         labels.each( function(idx, val) {
             var text = jQuery(val).text();
-            code.find('dd').prepend('<label for="tag-embed-label-' + text + '"><input type="radio" class="radio" name="tag-embed-choice" id="tag-embed-label-' + text + '" value="' + text + '"/>' + text + '</label>');
+            dd.prepend('<label for="tag-embed-label-' + text + '"><input type="radio" class="radio" name="tag-embed-choice" id="tag-embed-label-' + text + '" value="' + text + '"/>' + text + '</label>');
         });
+        // Create a textarea to display embed code
+        dd.append('<textarea id="tag-embed-textarea"></textarea>').find('#tag-embed-textarea').click(function(event) {
+            event.target.select();
+        });
+        // When clicking radio buttons, replace textarea value with matching hidden input fields
         code.find('input[type=radio]').click(function(event) {
-            code.find('.tag-embed-code-selected').hide();
-            code.find('#' + event.target.id.replace('-label-', '-code-')).show().addClass('tag-embed-code-selected').select();
-        }).first().click();
-
+            jQuery('#tag-embed-textarea').attr('value', code.find('#' + event.target.id.replace('-label-', '-code-')).attr('value')).select();
+        });
+        // Pre-select first option
+        code.find('input[type=radio]:first').click();
     }
     
 };
@@ -443,4 +555,6 @@ for(var fn in ImageTags_bak) {
 }
 
 // and delete the backed up ImageTags
-delete window['ImageTags_bak']
+if(window['ImageTags_bak']) {
+    delete window['ImageTags_bak'];
+}

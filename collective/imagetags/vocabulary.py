@@ -1,7 +1,6 @@
 from zope.interface import directlyProvides
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.component import getMultiAdapter
 
 from Products.Archetypes.interfaces import IBaseObject
 
@@ -10,7 +9,6 @@ def ImageFieldsVocabularyFactory(context):
     Returns a list of all the image fields available in current object
     """
     items = []
-    images = []
     if not IBaseObject.providedBy(context):
         return None
 

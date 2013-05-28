@@ -9,7 +9,10 @@
    <property name="description" i18n:translate=""></property>
    <property
       name="url_expr">string:${object/absolute_url}/@@imagetags-manage</property>
+<!--
+link_target doesn't work in Plone 3
    <property name="link_target"></property>
+-->
    <property name="icon_expr"></property>
    <property
       name="available_expr">object/@@imagetags-helper/has_image_field</property>

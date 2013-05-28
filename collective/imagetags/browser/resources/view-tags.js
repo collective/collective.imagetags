@@ -34,6 +34,7 @@ ImageTags['replaceImageWithTags'] = function(rule) {
         var url = parts.join('/') + '/@@imagetags-img?name=' + scale_name;
         
         var loader = jQuery('<div></div>').load(url, function() {
+            ImageTags.showHideHints(loader);
             img.parent().replaceWith(loader.children());
             ImageTags.linksOverOut();
             // Once the image is loaded, we can re-set attributes
@@ -42,12 +43,41 @@ ImageTags['replaceImageWithTags'] = function(rule) {
                 new_img.attr('class', classes);
                 new_img.attr('title', title);
             }
-    });
+        });
     });
 };
 
-// Add over/out events to tag-labels to show/hide matching tag boxes
+ImageTags['showHideHints'] = function(el) {
+    /* Given a jQuery element (or none), add mouseover/mouseout
+     * event handler to certain areas to provide tag hints
+     */
+    var selector = '.tag-image-wrapper'
+    var wrapper = el ? jQuery(el).find(selector) : jQuery(selector);
+    wrapper.hover(function() {
+        $this = jQuery(this);
+        if($this.hasClass('tag-tagging')) {
+            return;
+        }
+        $this.find('a.tag-link').hide().addClass('tag-hint').fadeIn(500);
+    }, function() {
+        $this = jQuery(this);
+        if($this.hasClass('tag-tagging')) {
+            return;
+        }
+        $this.find('a.tag-link').fadeOut(500, function() {
+            jQuery(this).removeClass('tag-hint').show();
+        });
+    });
+};
+
 jQuery(document).ready(function() {
+    // Add over/out events to tag-labels to show/hide matching tag boxes
     ImageTags.linksOverOut();
+    // Show/hide hints of tags when entering the image area
+    ImageTags.showHideHints();
+    // Prevent clicking on empty tag boxes
+    jQuery('a.tag-no-link').live('click', function() {
+        return false;
+    });
 });
 

@@ -32,7 +32,7 @@ class IImageTagsSettings(Interface):
 
     iframe_taglist_height = schema.Int(
                                    title=_(u"Tag list height"),
-                                   description=_("Number of pixels assigned to the 'Tagged' box when calculating iframe height."),
+                                   description=_(u"Number of pixels assigned to the 'Tagged' box when calculating iframe height."),
                                    required=True,
                                    default=20)
 

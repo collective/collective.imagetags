@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = '1.5.1'
 
 setup(name='collective.imagetags',
       version=version,
-      description="Adds Facebook-like tags to images",
+      description="Adds Facebook-like tags (or Flickr-like notes) to images",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "INSTALL.txt")).read()  + "\n" +
                        open(os.path.join("docs", "AUTHORS.txt")).read()  + "\n" +
@@ -31,12 +31,11 @@ setup(name='collective.imagetags',
           'collective.js.jqueryui',
           'plone.app.registry',
       ],
+      extras_require = {'plone3': ['simplejson']}, #included in python>2.5
       entry_points="""
       # -*- Entry points: -*-
 
       [z3c.autoinclude.plugin]
       target = plone
       """,
-      setup_requires=["PasteScript"],
-      paster_plugins=["ZopeSkel"],
       )

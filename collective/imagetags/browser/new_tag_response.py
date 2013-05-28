@@ -1,8 +1,9 @@
 from Acquisition import aq_inner
 
 from Products.Five import BrowserView
-
 from zope.component import getMultiAdapter
+
+from collective.imagetags.adapters.interfaces import IImageTagsManager
 
 class NewTagResponse(BrowserView):
     """ Required browser view for XML response
@@ -13,9 +14,10 @@ class NewTagResponse(BrowserView):
         self.request = request
         
     def __call__(self, id):
-        manage = getMultiAdapter((self.context, self.request), name="imagetags-manage")
-        tag = manage.get_tag(id, create_on_fail=False)
+        manager = IImageTagsManager(self.context)
+        tag = manager.get_tag(id)
+        image = getMultiAdapter((self.context, self.request), name="imagetags-img")
         self.tag_id = id
-        self.tag_box = '<![CDATA[%s]]>' % (manage.helper.tag_box(id=id, data=tag))
-        self.tag_title = '<![CDATA[%s]]>' % (manage.helper.tag_title(id=id, data=tag))
+        self.tag_box = '<![CDATA[%s]]>' % (image.tag_box(id=id, data=tag))
+        self.tag_title = '<![CDATA[%s]]>' % (image.tag_title(id=id, data=tag))
         return self.index()

@@ -1,7 +1,7 @@
 import unittest
 
-from zope.testing import doctestunit
-from zope.component import testing
+#from zope.testing import doctestunit
+#from zope.component import testing
 from Testing import ZopeTestCase as ztc
 
 from Products.Five import zcml
@@ -35,12 +35,17 @@ def test_suite():
 
         # Unit tests
         #doctestunit.DocFileSuite(
-        #    'README.txt', package='collective.imagetags',
+        #    'docs/voc.txt', package='collective.imagetags',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
 
         #doctestunit.DocTestSuite(
         #    module='collective.imagetags.browser.helper',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
+
+        # Integration tests that use PloneTestCase
+        ztc.ZopeDocFileSuite(
+            'docs/manager.txt', package='collective.imagetags',
+            test_class=base.FunctionalTestCaseWithContent),
 
         # Integration tests that use PloneTestCase
         ztc.ZopeDocFileSuite(

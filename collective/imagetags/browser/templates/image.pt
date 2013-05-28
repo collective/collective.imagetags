@@ -7,18 +7,16 @@
       tal:omit-tag="">
 
 
-    <tal:defines define="helper nocall:view/helper;
-                         image view/image | view/default_image | nothing;
+    <tal:defines define="image_name view/image | view/default_image | nothing;
+                         image python:path('view/context/' + image_name);
                          width image/width;
                          height image/height;
-                         tags view/get_tags;
-                         tag_keys python:tags.keys();
-                         dummy python:tag_keys.sort();
+                         tags view/tags;
                          embedded view/embedded | python:True;
                          full_url view/full_image | python:False;
                          iframe view/iframe | python:False;
                          full_screen view/full_screen | python:True;
-                         taglist_height helper/settings/iframe_taglist_height | python:20">
+                         taglist_height view/taglist_height | python:20">
                  
     <head tal:condition="iframe">
         <div tal:replace="structure provider:plone.htmlhead" />
@@ -33,7 +31,17 @@
     <tal:comment replace="nothing">
         portal-columns id is required by image-tags.css
     </tal:comment>
+
     <body tal:omit-tag="not:iframe" id="portal-columns">
+    
+        <div id="tag-stop-tagging-box" tal:condition="not:embedded" style="display: none;" >
+            <tal:legend i18n:translate="">Click on objects you want to tag and then enter title and optional link.</tal:legend>
+            <a href="#"
+                id="tag-stop-tagging"
+                i18n:translate="">
+              Done tagging
+            </a>
+        </div>
        
         <div class="tag-box-wrapper" style="padding: 30px 0 0 30px;" tal:omit-tag="embedded">
         
@@ -43,14 +51,14 @@
                                  class string:tag-image-wrapper ${class}" >
                                  
                <a class="discreet" tal:attributes="href string:${here/absolute_url}/${full_url}/image_view_fullscreen" tal:omit-tag="python: not full_screen">
-               <img src="" tal:replace="structure image/tag" />
+               <img src="" tal:replace="structure python:image.tag(css_class='tagged-image')" />
                </a>
 
                <tal:comment replace="nothing">
                    Tag links with boxes
                </tal:comment>
-               <tal:tags repeat="id python:tag_keys">
-                   <span tal:replace="structure python:helper.tag_box(id, tags[id])" />
+               <tal:tags repeat="tag python:tags">
+                   <span tal:replace="structure python:view.tag_box(tag[0], tag[1])" />
                </tal:tags> 
                 
                <tal:comment replace="nothing">
@@ -115,19 +123,19 @@
             tal:attributes="style style;
                             class class">
             <span class="label" i18n:translate="">Tagged:</span>
-            <span  class="tag-plain-tags"  
-            tal:define="display python:len(tag_keys)>0 and 'inline' or 'none'"
-            tal:attributes="style string:display: ${display};;">
-                <tal:tags repeat="id tag_keys">
-                <span tal:replace="structure python:helper.tag_title(id, tags[id])" /><span tal:omit-tag="" i18n:translate="imagetags.hyphen" tal:condition="not:repeat/id/end"> - </span>
+            <span class="tag-plain-tags"
+                  tal:define="display python:len(tags)>0 and 'inline' or 'none'"
+                  tal:attributes="style string:display: ${display};;">
+                <tal:tags repeat="tag tags">
+                <span tal:replace="structure python:view.tag_title(tag[0], tag[1])" /><span class="tag-hyphen" i18n:translate="imagetags.hyphen" tal:condition="not:repeat/tag/end"> - </span>
                 </tal:tags>
             </span>
 
-            <span  class="tag-plain-no-tag" 
-            i18n:translate="" 
-            tal:define="display python:len(tag_keys)==0 and 'inline' or 'none'"
-            tal:attributes="style string:display: ${display};;">
-            No tags yet
+            <span class="tag-plain-no-tag" 
+                  i18n:translate="" 
+                  tal:define="display python:len(tags)==0 and 'inline' or 'none'"
+                  tal:attributes="style string:display: ${display};;">
+                No tags yet
             </span>
             
             <tal:comment replace="nothing">
@@ -149,12 +157,12 @@
                 tal:attributes="href string:${context/absolute_url}/@@imagetags-manage;">
                 Start tagging
             </a>
-            <a href="" id="tag-stop-tagging"
+            <!--<a href="" id="tag-stop-tagging"
                 style="display: none;"
                 tal:condition="not:embedded"
                 i18n:translate="">
                 Done tagging
-            </a>
+            </a>-->
             </tal:buttons>
         </span>
         
@@ -163,10 +171,12 @@
             HTML iframe code to embedd this tagged image in text content
         </tal:comment>
     
+        <form>
         <dl class="collapsible inline tag-embed-code" tal:condition="python:not embedded and view.iframe_enabled">
             <dt class="collapsibleHeader" i18n:translate="">Embed code (HTML)</dt>
             <dd class="collapsibleContent">
-                <tal:sizes define="sizes python:helper.available_sizes(field_name=image.getId());
+                <tal:sizes define="field_name python:view.field_name(image.getId());
+                                   sizes python:view.available_sizes(field_name=field_name);
                                    url string:${context/absolute_url}/@@imagetags-img?&amp;iframe=1;">
                 <tal:row repeat="size sizes">
                     <label tal:content="python:size[0]" />
@@ -175,7 +185,7 @@
                                        dims python:size[1];
                                        width python:dims[0]+12;
                                        height python:dims[1]+taglist_height"
-                           tal:attributes="value string:&lt;iframe src=&quot;${url}&amp;name=${size_name}&quot; class=&quot;image-tags&quot; width=&quot;${width}&quot; height=&quot;${height}&quot;&gt;&lt;/iframe&gt;;
+                           tal:attributes="value string:&lt;iframe src=&quot;${url}&amp;name=${field_name}_${size_name}&quot; class=&quot;image-tags&quot; width=&quot;${width}&quot; height=&quot;${height}&quot;&gt;&lt;/iframe&gt;;
                                            id string:tag-embed-code-${size_name}"/>
                     <br />
                 </tal:row>
@@ -183,6 +193,7 @@
                 </tal:sizes>
             </dd>
         </dl>
+        </form>
                 
     </body>
     </tal:defines>

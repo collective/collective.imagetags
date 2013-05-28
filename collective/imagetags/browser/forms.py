@@ -1,33 +1,16 @@
-from zope.interface import implements
 from zope.component import getMultiAdapter
 
 from z3c.form import form, field, button
-from z3c.form.browser.text import TextFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
 from plone.app.z3cform.layout import wrap_form, FormWrapper
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
 
-from collective.imagetags.browser.interfaces import IAddTag, IAddAjaxTag
+from collective.imagetags.adapters.interfaces import IAddTag, \
+    IImageTagsManager
 from collective.imagetags import imagetagsMessageFactory as _
 
-
-class AddTagAdapter(object):
-    """ Dummy adapter required by z3c.form but isn't really used to persist data.
-        Data is persisted in special annotation in the object.
-    """
-        
-    implements(IAddTag)
-
-    id = ''
-    title = ''
-    url = ''
-    x = 0
-    y = 0
-    ajax = 0
-
-    def __init__(self, context):
-        self.context = context
     
 class AddTagForm(form.EditForm):
     """ Add / Update tag form
@@ -36,11 +19,9 @@ class AddTagForm(form.EditForm):
     label = _(u"Tag details")
     ignoreContext = True
     ignoreRequest = False
-    prefix = 'regform.'
     
     def __init__(self, context, request):
         super(form.EditForm, self).__init__(context, request)
-        self.manager = getMultiAdapter((self.context, request), name="imagetags-manage")
         self.helper = getMultiAdapter((self.context, request), name="imagetags-helper")
         
     def _updateWidgets(self):
@@ -65,14 +46,14 @@ class AddTagForm(form.EditForm):
         id_field = 'id'
         if id_field in request.form:
             id = request.form[id_field]
-            tag = self.manager.get_tag(id, False)
+            manager = IImageTagsManager(self.context)
+            tag = manager.get_tag(id)
             if not tag is None:
-                prefix = '%swidgets' % (self.prefix)
                 for x in tag:
                     self.widgets[x].value = tag[x]
                 self.widgets['id'].value = id
 
-    @button.buttonAndHandler(_('Save'), name='save')
+    @button.buttonAndHandler(_(u'Save'), name='save')
     def handleApply(self, action):
         """ Save (create or update) a tag
         """
@@ -80,15 +61,22 @@ class AddTagForm(form.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
-        ajax = 'ajax' in data
+        ajax = 'ajax' in self.request.form
             
-        id, tag = self.manager.save_tag(data)
-           
-        #  Special treatment for ajax/non-ajax save
+        manager = IImageTagsManager(self.context)
+        id, tag, new_tag = manager.save_tag(data)
+
         if not errors:
+            #  Special treatment for ajax/non-ajax save
             if not ajax:
-                self.request.response.redirect('%s/@@%s' % (self.context.absolute_url(), self.manager.__name__))
+                if new_tag:
+                    message = _(u"Tag '${title}' added.", mapping={u'title': tag['title']})
+                else:
+                    message = _(u"Tag '${title}' updated.", mapping={u'title': tag['title']})
+                self.request.response.redirect('%s/@@imagetags-manage' % self.context.absolute_url())
+                IStatusMessage(self.request).addStatusMessage(message, type='info')
             else:
+                # Return XML response
                 self.request.response.redirect('%s/@@imagetags-newtag?id=%s' % (self.context.absolute_url(), id))
                
 
@@ -98,30 +86,7 @@ class AddTagFormWrapper(FormWrapper):
    
     def getId(self):
         return self.__name__.replace('.', '-')
+
         
 AddTag = wrap_form(AddTagForm, __wrapper_class=AddTagFormWrapper)
 
-class AddTagAjaxForm(AddTagForm):
-    """ Special Add / Update tag form for AJAX interaction
-    """
-    fields = field.Fields(IAddTag, IAddAjaxTag)
-    label = _(u"Tag details")
-    ignoreContext = True
-    ignoreRequest = True
-    prefix = 'form.'
-
-    def updateWidgets(self):
-        super(AddTagForm, self).updateWidgets()
-        self._updateWidgets()
-        # Hide x, y widgets (they are set via click event)
-        self.widgets['x'].mode = HIDDEN_MODE
-        self.widgets['y'].mode = HIDDEN_MODE
-        # Hide ajax field (just a "marker" field)
-        self.widgets['ajax'].mode = HIDDEN_MODE
-        
-
-class AddTagAjaxFormWrapper(AddTagFormWrapper):
-    index = ViewPageTemplateFile('templates/form-ajax.pt')
-    #ajax = True
-
-AddTagAjax = wrap_form(AddTagAjaxForm, __wrapper_class=AddTagAjaxFormWrapper)

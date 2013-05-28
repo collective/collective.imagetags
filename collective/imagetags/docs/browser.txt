@@ -60,10 +60,9 @@ First I check that there's an image and then I get the 'Tags' tab
 ==================================================
 Interact with the new/update/delete tags interface
 Testing:
-a. browser/manage.py browser view: all its methods and template
-b. browser/helper.py browser view: tag_box and tag_title methods (and associated templates)
-c. browser/image.py browser view: rendering of template
-d. browser/forms.py: imagetags-form browser view (form) and imagetags-form-ajax browser view (form)
+a. adapters/manager.py browser view: all its methods and template
+c. browser/image.py browser view: rendering of template, tag_box and tag_title methods (and associated templates)
+d. browser/forms.py: imagetags-form browser view (form)
 e. browser/new_tag_response.py: rendering of xml template
 ==================================================
 
@@ -80,84 +79,91 @@ no object providing that marker interface
     >>> len(brains)
     0
     
-Manage page has two forms: one for non-JavaScript browsers and the other one for AJAX interaction.
-Some of their fields are identical, so special caution must be taken
-    >>> browser.getControl('Title')
-    Traceback (most recent call last):
-    ...
-    AmbiguityError: label 'Title'
-
-
-I will now add a new tag with the regular (non-JavaScript) form.
+I will now add a new tag.
 New tags are submitted without id
-    >>> browser.getControl(name='regform.widgets.id').value == ''
+    >>> browser.getControl(name='form.widgets.id').value == ''
     True
-    >>> browser.getControl('Title', index=0).value = 'Top left corner'
-    >>> browser.getControl('Link', index=0).value = 'http://plone.org/'
+    >>> browser.getControl('Title').value = 'Top left corner'
+    >>> browser.getControl('Link').value = 'http://plone.org/'
     >>> browser.getControl('X position').value = '0'
     >>> browser.getControl('Y position').value = '0'
-    >>> browser.getControl('Save', index=0).click()
+    >>> browser.getControl('Save').click()
     
 Regular creation of tags is notified via status messages
-    >>> 'Tag "Top left corner" added' in browser.contents
+    >>> "Tag 'Top left corner' added" in browser.contents
     True
  
 There should now be three links for the just created tag:
 1. The tag box inside the image (with a blank image inside it)
 2. The tag text in the list of tags (with no image inside it)
 3. The tag details in the table of tags
-    >>> tag = browser.getLink('Top left corner', index=0)
+(But first, we must get the new tag id, which is located as value of first checkbox to remove tags)
+
+    >>> id = browser.getControl(name='form.widgets.remove:list').options[-1]
+    >>> tag = browser.getLink(id='image-tag-' + id)
     >>> tag.url
     'http://plone.org/'
     >>> '[IMG]' in tag.text
     True
-    >>> tag = browser.getLink('Top left corner', index=1)
+    >>> 'Top left corner' in tag.text
+    True
+    
+    >>> tag = browser.getLink(id='image-tag-link-plain-' + id)
     >>> tag.url
     'http://plone.org/'
     >>> '[IMG]' in tag.text
     False
-    >>> tag = browser.getLink('Top left corner', index=2)
-    >>> '/@@imagetags-manage?id=' in tag.url
+    >>> 'Top left corner' in tag.text
     True
 
-There are no more 'Top left corner' links
-    >>> browser.getLink('Top left corner', index=3)
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
+    >>> tag = browser.getLink(url='/@@imagetags-manage?id=' + id)
+    >>> 'Top left corner' in tag.text
+    True
 
-The tag-box link should be absolute-positioned in -7.5%, -7.5% 
+The tag-box link (first one above) should be absolute-positioned in -7.5%, -7.5% 
 (15% taken from the center of the tag: 7.5% left, 7.5% right, 7.5% top, 7.5% bottom)
-    >>> tag = browser.getLink('Top left corner', index=0)
-    >>> tag.attrs['style'].strip()
+    >>> tag_box = browser.getLink('Top left corner')
+    >>> tag_box.attrs['style'].strip()
     'top: -7.5%; left: -7.5%;'
 
-I will now click on the last link to open this page with the tag's data pre-loaded in the form
-    >>> tag = browser.getLink('Top left corner', index=2)
+Let's now click on the last link to open this page with the tag's data pre-loaded in the form
     >>> tag.click()
-    >>> browser.getControl('Title', index=0).value
+    >>> browser.getControl('Title').value
     'Top left corner'
-    >>> browser.getControl('Link', index=0).value
+    >>> browser.getControl('Link').value
     'http://plone.org/'
     >>> browser.getControl('X position').value
     '0.0'
     >>> browser.getControl('Y position').value
     '0.0'
 
-This tag has now an id
-    >>> browser.getControl(name='regform.widgets.id').value != ''
+This tag has now an id (we already know it)
+    >>> browser.getControl(name='form.widgets.id').value == id
     True
 
-If I re-submit the tag, it will be updated. No new tag will be created, as it already has an id value
-    >>> browser.getControl('Link', index=0).value = ''
-    >>> browser.getControl('Save', index=0).click()
+If we re-submit the tag (without link), it will be updated. 
+No new tag will be created, as it already has an id value
+    >>> browser.getControl('Link').value = ''
+    >>> browser.getControl('Save').click()
     
 Regular updates of tags is notified via status messages
-    >>> 'Tag "Top left corner" updated' in browser.contents
+    >>> "Tag 'Top left corner' updated" in browser.contents
     True
 
-Now that the tag has no associated URL there's just one link, the one to edit it
-    >>> '@@imagetags-manage?id=' in browser.getLink('Top left corner').url
+Now that the tag has no associated URL there's just two links:
+1. The tag box inside the image (with a blank image inside it) but that points to #
+2. The tag details in the table of tags, the one to edit it
+    >>> tag = browser.getLink(id='image-tag-' + id)
+    >>> tag.attrs['href']
+    '#'
+    
+    >>> browser.getLink(id='image-tag-link-plain-' + id)
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+    
+    >>> tag = browser.getLink(url='/@@imagetags-manage?id=' + id)
+    >>> 'Top left corner' in tag.text
     True
     
 New tag should have marked the image object with IImageWithTags interface
@@ -167,26 +173,21 @@ New tag should have marked the image object with IImageWithTags interface
     >>> brains[0].getId
     'image'
 
-Let's try to create a new tag with the second (AJAX-oriented) form.
-    >>> browser.getControl('Title', index=1).value = 'Bottom right corner'
-    >>> browser.getControl('Link', index=1).value = 'http://plone.org/'
+Let's try to create a new tag in the AJAX fashion.
+    >>> field = browser.getControl('Title')
+    >>> field.value = 'Bottom right corner'
+    >>> browser.getControl('Link').value = 'http://plone.org/'
+    >>> browser.getControl(name='form.widgets.x').value = '100'
+    >>> browser.getControl(name='form.widgets.y').value = '100'    
 
-'X and Y fields are hidden now'
-    >>> hidden = browser.getControl(name='form.widgets.x')
-    >>> hidden.type
-    'hidden'
-    >>> hidden.value = '100'
-    >>> hidden = browser.getControl(name='form.widgets.y')
-    >>> hidden.type
-    'hidden'
-    >>> hidden.value = '100'
+To submit in an AJAX way, we must add an 'ajax' field to the 
+submission request.
+    >>> form = field.mech_form
+    >>> form.new_control('text', 'ajax:int', attrs={'value': '1'})
+    >>> browser.getControl('Save').click()
 
-There's also a hidden 'ajax' field.
-This field tells this form is submitted via ajax, so a special response is expected.
-    >>> hidden = browser.getControl(name='form.widgets.ajax')
-    >>> hidden.type
-    'hidden'
-    >>> browser.getControl('Save', index=1).click()
+This parameter tells this form is submitted via AJAX, so a special 
+response is expected.
     >>> 'xml' in browser.contents
     True
     >>> browser.headers['content-type']
@@ -201,35 +202,39 @@ This field tells this form is submitted via ajax, so a special response is expec
     >>> '<title><![CDATA[ <span id="image-tag-plain-' in contents
     True
     
-    >>> browser.goBack()
-    >>> browser.reload()
-    
-Creation of tags with ajax-form (form submitting an 'ajax' field) is NOT notified via status messages
-    >>> 'Tag "Bottom right corner" added' in browser.contents
+Creation of tags via AJAX is NOT notified via status messages
+    >>> browser.open(portal_url + '/image/@@imagetags-manage')
+    >>> "Tag 'Bottom right corner' added" in browser.contents
     False
 
-The new tag is nos positioned at 92.5%;92.5% (100 - 7.5)
+The new tag is now positioned at 92.5%;92.5% (100 - 7.5)
     >>> tag = browser.getLink('Bottom right corner')
     >>> tag.attrs['style'].strip()
     'top: 92.5%; left: 92.5%;'
 
 Yet another tag
-    >>> browser.getControl('Title', index=0).value = 'Center of the image'
-    >>> browser.getControl('Link', index=0).value = 'http://plone.net/'
+    >>> browser.getControl('Title').value = 'Center of the image'
+    >>> browser.getControl('Link').value = 'http://plone.net/'
     >>> browser.getControl('X position').value = '50'
     >>> browser.getControl('Y position').value = '50'
-    >>> browser.getControl('Save', index=0).click()
+    >>> browser.getControl('Save').click()
 
-New tag is informed via status message    >>> from Products.CMFCore.utils import getToolByName
-    >>> catalog = getToolByName(self.portal, 'portal_catalog')
-
-    >>> 'Tag "Center of the image" added' in browser.contents
+New tag is informed via status message    
+    >>> "Tag 'Center of the image' added" in browser.contents
     True
 
 The new tag is positioned at 42.5%;42.5% (50 - 7.5)
     >>> tag = browser.getLink('Center of the image')
     >>> tag.attrs['style'].strip()
     'top: 42.5%; left: 42.5%;'
+
+A fourth tag to complete the next removal test
+    >>> browser.getControl('Title').value = 'Arbitrary tag'
+    >>> browser.getControl('Link').value = ''
+    >>> browser.getControl('X position').value = '1'
+    >>> browser.getControl('Y position').value = '2'
+    >>> browser.getControl('Save').click()
+
 
 We'll remove now the last created tag    
     >>> remove = browser.getControl(name='form.widgets.remove:list')
@@ -239,8 +244,24 @@ We'll remove now the last created tag
 Removals are also informed via status messages
     >>> '1 tag removed' in browser.contents
     True
+    
+We'll try now to remove a tag in the AJAX way:
+1. Get the control
+2. Keep the tag id
+3. Open the URL (passing an extra "ajax" parameter).
+4. Check results
+    >>> remove = browser.getControl(name='form.widgets.remove:list')
+    >>> id = remove.options[-1]
+    >>> url = remove.mech_form.action
+    >>> browser.open(url + '?' + remove.name + '=' + id + '&ajax:int=1')
+    >>> browser.headers['content-type']
+    'application/json; charset=utf-8'
+    >>> ('{"removed": ["%s"]}' % id) in browser.contents
+    True
 
-Remove all tags
+Remove all remaining tags
+    >>> browser.goBack()
+    >>> browser.reload()
     >>> remove = browser.getControl(name='form.widgets.remove:list')
     >>> remove.value = remove.options
     >>> browser.getControl('Remove selected').click()
@@ -269,15 +290,15 @@ c. skins templates
 ====================================
 
 Now let's create two new tags to play with
-    >>> browser.getControl('Title', index=0).value = 'First tag'
+    >>> browser.getControl('Title').value = 'First tag'
     >>> browser.getControl('X position').value = '0'
     >>> browser.getControl('Y position').value = '0'
-    >>> browser.getControl('Save', index=0).click()
+    >>> browser.getControl('Save').click()
 
-    >>> browser.getControl('Title', index=0).value = 'Second tag'
+    >>> browser.getControl('Title').value = 'Second tag'
     >>> browser.getControl('X position').value = '10'
     >>> browser.getControl('Y position').value = '10'
-    >>> browser.getControl('Save', index=0).click()
+    >>> browser.getControl('Save').click()
 
 Let's try some settings in Plone Control Panel
     >>> browser.open(portal_url + '/plone_control_panel')

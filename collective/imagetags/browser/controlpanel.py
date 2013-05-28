@@ -1,6 +1,5 @@
-from zope.interface import Interface
 from plone.app.registry.browser import controlpanel
-from z3c.form import button, form
+from z3c.form import button
 from plone.z3cform import layout
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
@@ -63,7 +62,8 @@ class AdminRulesForm(controlpanel.RegistryEditForm):
 
 
         # Notify the user
-        IStatusMessage(self.request).addStatusMessage(_(u"Changes saved"), "info")
+        if changes:
+            IStatusMessage(self.request).addStatusMessage(_(u"Changes saved"), "info")
         self.request.response.redirect("%s/%s" % (self.context.absolute_url(), self.control_panel_view))
 
     # Copy of the original Cancel button

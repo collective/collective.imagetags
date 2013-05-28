@@ -22,16 +22,5 @@
           tal:condition="url"
           class="tag-link-plain">
         </a>
-        <span class="tag-actions">(
-            <a i18n:translate="" class="tag-remove" href=""
-              tal:attributes="href string:${context/absolute_url}/@@imagetags-manage?form.widgets.remove:list=${id}">
-              Remove
-            </a> | 
-            <a i18n:translate="" class="tag-edit" href=""
-              tal:attributes="href string:${context/absolute_url}/@@imagetags-manage?id=${id};
-                              id string:image-tag-edit-${safe_id}">
-              Edit
-            </a>
-        )</span>
     </span>
 </html>

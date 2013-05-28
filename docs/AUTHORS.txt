@@ -1,5 +1,20 @@
-Authors and Contributors
-========================
+Credits
+=======
+
+Development
+-----------
+
 * Marcos F. Romero <marcos.romero {at} inter-cultura {dot} com> (developer)
 * Juan Pablo Gimenez <jpg {at} rcom {dot} com {dot} ar> (advisor)
+* Maurits van Rees <m.van.rees {at} zestsoftware {dot} nl> (contributor)
+* Fred van Dijk <f.van.dijk {at} zestsoftware {dot} nl> (contributor)
+* JeanMichel Francois <toutpt {at} makina-corpus {dot} org> (contributor) 
+
+Translations
+------------
+
+* English (en): Marcos F. Romero
+* French (fr): JeanMichel Francois
+* Dutch (nl): Fred van Dijk
+* Spanish (es): Marcos F. Romero
 

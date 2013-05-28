@@ -9,14 +9,15 @@
     <tal:defines define="view_id view/getId">
         <fieldset id="" tal:attributes="id view_id">
             <legend tal:content="view/label">Legend</legend>
-            <span tal:replace="structure view/contents" />
+            <div id="ajax-form">
+                <span tal:replace="structure view/contents" />
+            </div>
         </fieldset>
         
         <tal:comment replace="nothing">
             All the following are just used for the AJAX form
         </tal:comment>
     </tal:defines>
-    
     
     
     

@@ -6,35 +6,33 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="collective.imagetags">
 
-  <five:registerPackage package="." initialize=".initialize" />
-  
-  <!-- Include configuration for dependencies listed in setup.py -->
-  <includeDependencies package="." />
+    <five:registerPackage package="." initialize=".initialize" />
 
-  <i18n:registerTranslations directory="locales" />
+    <!-- Include configuration for dependencies listed in setup.py -->
+    <includeDependencies package="." />
 
-  <include package=".browser" />
+    <i18n:registerTranslations directory="locales" />
 
-  <genericsetup:registerProfile
-      name="default"
-      title="collective.imagetags"
-      directory="profiles/default"
-      description="Installs the collective.imagetags package"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-  
-  <utility
-	component="collective.imagetags.vocabulary.ImageFieldsVocabularyFactory"
-	name="collective.imagetags.imagefields"
-	/>
+    <include package=".browser" />
+    <include package=".adapters" />
+    <include file="profiles.zcml" />
 
-  <utility
+
+    <!-- Vocabularies registration -->
+    <utility
+        component="collective.imagetags.vocabulary.ImageFieldsVocabularyFactory"
+        name="collective.imagetags.imagefields"
+        />
+
+    <utility
         component="collective.imagetags.vocabulary.ImprovedTemplatesVocabularyFactory"
         name="collective.imagetags.templates"
         />
 
-  <cmf:registerDirectory name="imagetags_newsitem" />
-  <cmf:registerDirectory name="imagetags_image" />
-  <cmf:registerDirectory name="imagetags_fullscreen"  />
+
+    <!-- Skins registration -->
+    <cmf:registerDirectory name="imagetags_newsitem" />
+    <cmf:registerDirectory name="imagetags_image" />
+    <cmf:registerDirectory name="imagetags_fullscreen"  />
 
 </configure>

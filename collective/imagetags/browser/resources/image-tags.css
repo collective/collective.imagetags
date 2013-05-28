@@ -1,3 +1,7 @@
+/*************** Layout for tags **************/
+
+    /* Tag box, wrapper and grid */
+
 .tag-box-wrapper {
     padding: 30px 0 0 30px;
 }
@@ -5,10 +9,6 @@
 .tag-image-wrapper {
     position: relative;
     display: block; /* .tag-image-wrapper is a span acting as a div */
-}
-
-.tag-tagging img {
-    cursor: crosshair;
 }
 
 .tag-manage {
@@ -67,20 +67,23 @@
     display: none;
 }
 
+    /* End of Tag box, wrapper and grid */
+
+.tag-tagging img {
+    cursor: crosshair;
+}
+
+    /* tag-link is the box, the tagged area */
 #portal-columns a.tag-link {
     position: absolute;
     height: 15%;
     width: 15%;
     display: block;
     text-align: center;
-    font-size: 10pt;
+    font-size: 8pt;
     line-height: normal;
     border: 0;
-    z-index: 200;
-}
-
-#portal-columns a.tag-link:hover {
-    border: none;
+    z-index: 150;
 }
 
 #portal-columns .tag-blank {
@@ -88,13 +91,52 @@
     height: 100%;
 }
 
-#portal-columns .tag-image-wrapper a,
-#portal-columns .tag-image-wrapper a:visited {
+/* Initially tag-links are squared */
+#portal-columns .tag-image-wrapper a {
+    border: 1px solid #205C90;
+}
+
+/* If JS is enabled tag-image-wrapper gets an extra tag-manage-inline 
+   class, and all links are no-longer squared 
+*/
+#portal-columns .tag-manage-inline a,
+#portal-columns .tag-manage-inline a:link {
+    border: 1px solid transparent;
+}
+
+#portal-columns .tag-tagging a.tag-cross {
+    border: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#portal-columns .tag-tagging a.tag-cross:hover {
+    border: 0;
+}
+
+/*#portal-columns .tag-tagging a.tag-cross:hover .ui-icon {
+    background-image: url(++resource++jquery-ui-themes/sunburst/images/ui-icons_ffffff_256x240.png);
+}*/
+
+#portal-columns .tag-image-wrapper a.tag-hint {
+    border: 1px solid #729FC8;
+}
+
+#portal-columns .tag-image-wrapper a:hover,
+#portal-columns .tag-image-wrapper a.tag-show,
+#portal-columns .tag-tagging a.tag-link {
+    border: 1px solid #205C90;
+}
+
+#portal-columns .tag-image-wrapper a.discreet,
+#portal-columns .tag-image-wrapper a.discreet:hover {
     border: 0;
 }
 
 a .tag-link-title,
-a .tag-link-center {
+a .tag-link-center,
+a.tag-cross {
     display: none;
 }
 
@@ -108,7 +150,11 @@ a.tag-show .tag-link-center {
     height: 50%;
     width: 100%;
     left: 1px;
-    background: url(++resource++collective.imagetags/tag-center.gif) no-repeat 50% 0 transparent;
+    background: transparent;
+}
+
+.tag-tagging a.tag-cross {
+    display: block;
 }
 
 /* When managing tags it's displayed. When viewing image, just on hover or when hover the matching plain link */
@@ -118,22 +164,24 @@ a.tag-link:hover .tag-link-title,
 a.tag-show .tag-link-title {
     color: #fff;
     background: #205C90;
-    border: 4px solid #205C90;
+    border: 1px solid #205C90;
+    padding: 4px 0;
     top: 100%;
     display: block;
     position: absolute;
     font-weight: bold;
     z-index: 250;
-    left: 50%;
-    white-space: nowrap;
+    left: -1px;
+    width: 100%;
 }
 
 .tag-manage a.tag-link-active .tag-link-title,
 .tag-tagging a.tag-link-active .tag-link-title {
     background: #002c4e;
     border: 2px solid #205c90;
-    padding: 2px;
-}ImageTags
+    margin: -1px 0 0 -2px;
+    left: 0;
+}
 
 .tag-link, tag-link img, tag-link span {
     cursor: pointer;
@@ -174,10 +222,25 @@ a.tag-show .tag-link-title {
 }
 
 #tag-tag-picture, 
-#tag-start-tagging, 
-#tag-stop-tagging {
+#tag-start-tagging {
     margin-left: 1em;
     font-weight: bold;
+}
+
+#tag-stop-tagging-box {
+    background: #75AD0A;
+    color: white;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+#tag-stop-tagging {
+    background: white;
+    border: 1px solid white;
+    text-decoration: none;
+    color: black;
+    padding: 2px;
+    font-size: 90%;
 }
 
 iframe.image-tags {

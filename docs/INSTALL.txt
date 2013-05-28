@@ -24,3 +24,25 @@ Installation
 You can skip the ZCML slug if you are using Plone 3.3 or if you are going to explicitly include
 the package from another package's configure.zcml file.
 
+Plone 3 installation
+--------------------
+
+* Add this line to the ``extends`` parameter in main ``buildout`` section::
+
+    [buildout]
+    ...
+    extends=
+        ...
+        http://svn.plone.org/svn/collective/collective.imagetags/kgs/collective.imagetags.plone3.cfg
+
+Upgrades
+--------
+
+If you already had collective.imagetags installed prior to 1.5, you'll need to run an 
+upgrade step to migrate old style tag ids. Go to:
+
+1. ZMI
+2. portal_setup
+3. Upgrades
+4. Select collective.imagetags:default and press "Choose Profile"
+5. Run required upgrade steps
